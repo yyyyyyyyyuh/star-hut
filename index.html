@@ -1,0 +1,3597 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>&#x661F;&#x52A8;&#x5C0F;&#x5C4B;</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&family=Baloo+2:wght@600;700&display=swap');
+
+  :root {
+    --bg-color: #f4f8fb;
+    --text-blue: #2c73c4;
+    --border-blue: #86b2e5;
+    --border-orange: #f7c677;
+    --bg-orange: #fffdf8;
+    --border-green: #9fdac2;
+    --bg-green: #f5fbf8;
+    --border-purple: #d3c2ef;
+    --bg-purple: #faf6ff;
+    --border-light-blue: #9ec3ff;
+    --bg-light-blue: #f4f8ff;
+    --btn-green: #58c89c;
+    --btn-yellow: #fbc05c;
+    --warning-bg: rgba(255, 247, 217, 0.92);
+    --shadow: 0 10px 25px rgba(122, 158, 212, 0.12);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'ZCOOL KuaiLe', 'Baloo 2', cursive, sans-serif;
+    background:
+      radial-gradient(circle at top left, rgba(255, 223, 146, 0.15), transparent 24%),
+      radial-gradient(circle at top right, rgba(161, 196, 253, 0.2), transparent 28%),
+      var(--bg-color);
+    margin: 0;
+    padding: 20px;
+    color: #334155;
+    display: flex;
+    justify-content: center;
+  }
+
+  .app-container {
+    width: 1400px;
+    max-width: 100%;
+    position: relative;
+  }
+
+  .sketch-box {
+    border: 3px solid;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+  }
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-color: var(--border-blue);
+    background: linear-gradient(180deg, #eef6ff 0%, #e2eefb 100%);
+    padding: 16px 30px;
+    margin-bottom: 20px;
+  }
+
+  .header-logo {
+    font-size: 28px;
+    color: var(--text-blue);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 18px;
+  }
+
+  .user-profile-btn {
+    border: none;
+    background: transparent;
+    padding: 6px 8px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    color: inherit;
+    font: inherit;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .user-profile-btn:hover {
+    background: rgba(255, 255, 255, 0.55);
+    transform: translateY(-1px);
+  }
+
+  .user-name-text {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .avatar {
+    width: 58px;
+    height: 58px;
+    background: linear-gradient(180deg, #ffe5c0 0%, #ffd7a5 100%);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    border: 3px solid #fff;
+    box-shadow: 0 8px 16px rgba(255, 196, 120, 0.28);
+  }
+
+  .section-title {
+    font-size: 24px;
+    color: var(--text-blue);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .main-layout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+  }
+
+  .left-col {
+    flex: 5.6;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .right-col {
+    flex: 4.4;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .capture-area {
+    border-color: var(--border-orange);
+    background-color: var(--bg-orange);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .card-title {
+    color: #ef965d;
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+
+  .capture-stage {
+    width: min(100%, 760px);
+    min-height: 450px;
+    position: relative;
+    border: 3px dashed #a8c7ff;
+    border-radius: 28px;
+    overflow: hidden;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(245, 249, 255, 0.9) 100%),
+      #fff;
+    box-shadow: inset 0 0 0 4px rgba(255, 255, 255, 0.45);
+  }
+
+  .capture-video,
+  .capture-canvas,
+  .stage-ui {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .capture-video {
+    object-fit: cover;
+    transform: scaleX(-1);
+    background: linear-gradient(180deg, #fbfdff 0%, #eef6ff 100%);
+  }
+
+  .capture-canvas {
+    pointer-events: none;
+  }
+
+  .placeholder-state {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: #8ba9d5;
+    background: linear-gradient(180deg, rgba(255, 254, 250, 0.96), rgba(247, 250, 255, 0.88));
+    transition: opacity 0.3s ease;
+    z-index: 2;
+  }
+
+  .placeholder-state.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .placeholder-figure {
+    width: clamp(120px, 24%, 176px);
+    max-height: 210px;
+    object-fit: contain;
+    display: block;
+    filter: drop-shadow(0 10px 18px rgba(120, 157, 220, 0.14));
+  }
+
+  .stage-ui {
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .countdown-overlay,
+  .warning-bubble,
+  .camera-tip,
+  .timer-chip,
+  .resume-training-btn {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 24px;
+    text-align: center;
+  }
+
+  .camera-tip,
+  .warning-bubble {
+    top: 18px;
+    padding: 10px 18px;
+    background: var(--warning-bg);
+    color: #d27c3f;
+    border: 2px solid #ffd28d;
+    font-size: 15px;
+    display: none;
+    max-width: calc(100% - 30px);
+    z-index: 6;
+  }
+
+  .camera-tip.show,
+  .warning-bubble.show {
+    display: block;
+  }
+
+  .warning-bubble {
+    top: auto;
+    bottom: 20px;
+    min-width: min(78%, 520px);
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.92);
+    border-color: #cdb8f4;
+    color: #6f79a8;
+    box-shadow: 0 10px 24px rgba(131, 142, 201, 0.18);
+    z-index: 7;
+  }
+
+  .timer-chip {
+    top: 126px;
+    min-width: 136px;
+    padding: 10px 18px;
+    background: rgba(122, 165, 246, 0.92);
+    color: #fff;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    font-family: 'Baloo 2', 'ZCOOL KuaiLe', cursive, sans-serif;
+    font-size: 26px;
+    letter-spacing: 1px;
+    box-shadow: 0 12px 24px rgba(109, 158, 237, 0.28);
+    z-index: 6;
+  }
+
+  .resume-training-btn {
+    bottom: 82px;
+    display: none;
+    pointer-events: auto;
+    z-index: 8;
+    padding: 12px 28px;
+    border: none;
+    background: linear-gradient(180deg, #7ed6ae 0%, #58c89c 100%);
+    color: #fff;
+    font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
+    font-size: 20px;
+    box-shadow: 0 14px 26px rgba(88, 200, 156, 0.28);
+    cursor: pointer;
+  }
+
+  .resume-training-btn.show {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .countdown-overlay {
+    top: 44%;
+    width: 164px;
+    height: 164px;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 245, 224, 0.92);
+    color: #ff9f4f;
+    border: 4px solid rgba(255, 202, 120, 0.9);
+    font-family: 'Baloo 2', 'ZCOOL KuaiLe', cursive, sans-serif;
+    font-size: 92px;
+    box-shadow: 0 18px 35px rgba(255, 185, 118, 0.25);
+    backdrop-filter: blur(2px);
+    z-index: 7;
+  }
+
+  .countdown-overlay.show {
+    display: flex;
+    animation: bounceIn 0.35s ease;
+  }
+
+  @keyframes bounceIn {
+    0% { transform: translateX(-50%) scale(0.6); }
+    70% { transform: translateX(-50%) scale(1.08); }
+    100% { transform: translateX(-50%) scale(1); }
+  }
+
+  .top-stars {
+    position: absolute;
+    inset: 36px 20px auto;
+    height: 78px;
+    z-index: 4;
+  }
+
+  .beat-track {
+    position: absolute;
+    top: 112px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    align-items: center;
+    gap: 16px;
+    z-index: 6;
+    padding: 10px 18px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: 0 10px 24px rgba(145, 177, 236, 0.16);
+    backdrop-filter: blur(4px);
+  }
+
+  .beat-track.show {
+    display: inline-flex;
+  }
+
+  .beat-dot {
+    width: 42px;
+    height: 42px;
+    border: 3px dashed #a8c7ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: #ffb45d;
+    background: rgba(255, 255, 255, 0.95);
+    transition: transform 0.12s ease, background-color 0.12s ease, border-color 0.12s ease, opacity 0.12s ease;
+    opacity: 0.7;
+  }
+
+  .beat-dot.active {
+    opacity: 1;
+    background: #fbd28b;
+    border-color: #f7c677;
+    transform: scale(1.18);
+    box-shadow: 0 0 16px rgba(251, 210, 139, 0.72);
+  }
+
+  .beat-dot.hit {
+    opacity: 1;
+    background: #7ed6ae;
+    border-color: #58c89c;
+    color: #fff;
+    transform: scale(1.1);
+  }
+
+  .beat-dot.missed {
+    opacity: 0.85;
+    background: #ffe4e4;
+    border-color: #f3b0b0;
+    color: #ef8b8b;
+  }
+
+  .star {
+    position: absolute;
+    width: 58px;
+    height: 58px;
+    display: grid;
+    place-items: center;
+    font-size: 38px;
+    filter: drop-shadow(0 10px 18px rgba(255, 196, 84, 0.3));
+    transform-origin: center;
+    animation: floatStar 2.6s ease-in-out infinite;
+  }
+
+  .star.captured {
+    animation: popAway 0.45s ease forwards;
+  }
+
+  .star.spawning {
+    animation: starSpawn 0.55s ease;
+  }
+
+  @keyframes floatStar {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-8px) scale(1.05); }
+  }
+
+  @keyframes popAway {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: translateY(-26px) scale(1.7); }
+  }
+
+  @keyframes starSpawn {
+    0% { opacity: 0; transform: scale(0.45) rotate(-18deg); }
+    70% { opacity: 1; transform: scale(1.14) rotate(10deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  .celebration-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 8;
+  }
+
+  .reward-burst {
+    position: absolute;
+    top: 16%;
+    font-size: 28px;
+    opacity: 0;
+    animation: burstFall 1.8s ease-out forwards;
+  }
+
+  @keyframes burstFall {
+    0% { transform: translateY(-24px) scale(0.7) rotate(0deg); opacity: 0; }
+    20% { opacity: 1; }
+    100% { transform: translateY(310px) scale(1.15) rotate(180deg); opacity: 0; }
+  }
+
+  .helper-area {
+    border-color: var(--border-purple);
+    background-color: var(--bg-purple);
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    gap: 15px;
+  }
+
+  .helper-bubble {
+    background-color: #fff;
+    border: 2px solid var(--border-purple);
+    border-radius: 255px 25px 225px 25px / 25px 225px 25px 255px;
+    padding: 10px 15px;
+    flex-grow: 1;
+    color: #667085;
+    font-size: 14px;
+    min-height: 62px;
+    display: flex;
+    align-items: center;
+  }
+
+  .today-action {
+    border-color: var(--border-green);
+    background-color: var(--bg-green);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .action-thumb {
+    width: 124px;
+    height: 188px;
+    background-color: #fff;
+    border: 2px solid #c8e6d8;
+    border-radius: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 18px rgba(163, 212, 192, 0.16);
+    overflow: hidden;
+    padding: 6px;
+  }
+
+  .action-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    transform: scale(1.08);
+    transform-origin: center;
+  }
+
+  .action-info h3 {
+    color: #409975;
+    margin: 0 0 10px 0;
+    font-size: 28px;
+  }
+
+  .tags {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    padding: 5px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    border: 1px solid;
+  }
+
+  .tag-green {
+    color: #58c89c;
+    border-color: #58c89c;
+    background: #eafff5;
+  }
+
+  .tag-blue {
+    color: #86b2e5;
+    border-color: #86b2e5;
+    background: #f0f7ff;
+  }
+
+  .feedback-area {
+    border-color: var(--border-light-blue);
+    background-color: var(--bg-light-blue);
+    flex-grow: 1;
+  }
+
+  .feedback-title {
+    color: #6d9eed;
+    text-align: center;
+    margin-bottom: 15px;
+  }
+
+  .feedback-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .feedback-item {
+    background-color: #fff;
+    border: 1px solid var(--border-light-blue);
+    border-radius: 18px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+  }
+
+  .item-icon {
+    margin-right: 10px;
+    font-size: 18px;
+  }
+
+  .item-label {
+    width: 112px;
+  }
+
+  .item-value {
+    flex-grow: 1;
+    text-align: right;
+    font-weight: bold;
+  }
+
+  .progress-bg {
+    flex-grow: 1;
+    height: 10px;
+    background-color: #e0eaf5;
+    border-radius: 999px;
+    margin: 0 10px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    width: 0;
+    height: 100%;
+    background: linear-gradient(90deg, #8db6ff 0%, #5f93f2 100%);
+    border-radius: 999px;
+    transition: width 0.28s ease;
+  }
+
+  .btn-container {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+
+  #rightActionButtons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 140;
+  gap: 20px;
+}
+
+  #rightActionButtons .btn {
+  width: auto;
+  min-height: auto;
+  padding: 14px 50px;
+  font-size: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.2;
+  box-sizing: border-box;
+}
+
+  .btn-content {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .btn-icon {
+    font-size: 0.92em;
+    line-height: 1;
+    flex: 0 0 auto;
+  }
+
+  .btn-label {
+    display: inline-block;
+    line-height: 1.22;
+  }
+
+  .btn {
+    border: none;
+    padding: 14px 50px;
+    border-radius: 255px 25px 225px 25px / 25px 225px 25px 255px;
+    font-family: 'ZCOOL KuaiLe', cursive, sans-serif;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .btn:hover {
+    transform: scale(1.04);
+  }
+
+  .btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.72;
+    transform: none;
+  }
+
+  .btn-green {
+    background-color: var(--btn-green);
+  }
+
+  .btn-yellow {
+    background-color: var(--btn-yellow);
+  }
+
+  .floating-widget {
+    position: absolute;
+    bottom: -20px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    z-index: 100;
+  }
+
+  .popup-menu {
+    background-color: #eef5fc;
+    border: 3px solid #a1c4fd;
+    border-radius: 20px;
+    padding: 15px 20px;
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.9);
+    transform-origin: bottom right;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .popup-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+  }
+
+  .tool-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #5b8ce1;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  .tool-icon-box {
+    width: 50px;
+    height: 50px;
+    background-color: #fff;
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 26px;
+    margin-bottom: 8px;
+    box-shadow: 0 4px 8px rgba(161, 196, 253, 0.2);
+    transition: transform 0.2s;
+  }
+
+  .tool-btn:hover .tool-icon-box {
+    transform: scale(1.1);
+  }
+
+  .star-trigger {
+    width: 60px;
+    height: 60px;
+    background-color: #ffebd2;
+    border: 3px solid #fbd28b;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 32px;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(251, 210, 139, 0.4);
+    transition: all 0.2s;
+  }
+
+  .star-trigger:hover {
+    transform: translateY(-3px) scale(1.05);
+  }
+
+  .page-hidden {
+    display: none !important;
+  }
+
+  .report-page {
+    width: 1400px;
+    max-width: 100%;
+  }
+
+  .report-shell {
+    border-color: #f7d39a;
+    background:
+      radial-gradient(circle at top left, rgba(255, 236, 181, 0.2), transparent 28%),
+      linear-gradient(180deg, #fffefb 0%, #fbfdff 100%);
+  }
+
+  .report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-color: #f7d39a;
+    background: linear-gradient(180deg, #fffdf7 0%, #fefefe 100%);
+    padding: 16px 26px;
+  }
+
+  .report-logo {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--text-blue);
+    font-size: 30px;
+  }
+
+  .report-logo-star {
+    width: 56px;
+    height: 56px;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #fff5d8 0%, #ffeab8 100%);
+    box-shadow: 0 10px 20px rgba(255, 204, 112, 0.26);
+    font-size: 34px;
+  }
+
+  .report-profile {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .report-profile-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+  }
+
+  .report-profile-copy small {
+    color: #d3985d;
+    font-size: 14px;
+  }
+
+  .report-back-btn {
+    border: none;
+    border-radius: 999px;
+    padding: 12px 20px;
+    background: linear-gradient(180deg, #8fc8ff 0%, #73aae9 100%);
+    color: #fff;
+    font-family: 'ZCOOL KuaiLe', 'Baloo 2', cursive, sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(115, 170, 233, 0.24);
+  }
+
+  .report-section-title {
+    font-size: 22px;
+    color: var(--text-blue);
+    margin: 10px 0 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .report-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1.65fr) minmax(320px, 0.95fr);
+    gap: 28px;
+    align-items: start;
+  }
+
+  .calendar-card {
+    border-color: var(--border-orange);
+    background: var(--bg-orange);
+  }
+
+  .calendar-card-header {
+    text-align: center;
+    color: #ef965d;
+    font-size: 18px;
+    margin-bottom: 14px;
+  }
+
+  .calendar-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+
+  .calendar-month-label {
+    font-size: 24px;
+    color: #3c4b67;
+  }
+
+  .calendar-nav-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #ffd39b;
+    background: #fff;
+    color: #f1a04a;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .calendar-weekdays,
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+
+  .calendar-weekdays {
+    margin-bottom: 6px;
+    color: #475569;
+    font-size: 15px;
+    text-align: center;
+  }
+
+  .calendar-weekdays div {
+    padding: 8px 0;
+  }
+
+  .calendar-grid {
+    border: 2px solid #ffe4b8;
+    border-radius: 26px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.78);
+  }
+
+  .calendar-day {
+    min-height: 108px;
+    padding: 10px 8px 8px;
+    border-right: 1px solid #f8e6c8;
+    border-bottom: 1px solid #f8e6c8;
+    background: rgba(255, 255, 255, 0.92);
+    position: relative;
+  }
+
+  .calendar-day:nth-child(7n) {
+    border-right: none;
+  }
+
+  .calendar-day.day-last-row {
+    border-bottom: none;
+  }
+
+  .calendar-day.is-empty {
+    background: rgba(248, 250, 255, 0.65);
+  }
+
+  .calendar-day.is-today {
+    box-shadow: inset 0 0 0 3px #f4ba49;
+    z-index: 1;
+  }
+
+  .calendar-day-number {
+    font-size: 15px;
+    color: #334155;
+    margin-bottom: 8px;
+  }
+
+  .calendar-day.is-weekend .calendar-day-number {
+    color: #fb7185;
+  }
+
+  .calendar-today-badge {
+    position: absolute;
+    top: -10px;
+    right: 8px;
+    background: linear-gradient(180deg, #ffca77 0%, #f59e55 100%);
+    color: #fff;
+    border-radius: 999px;
+    padding: 3px 9px;
+    font-size: 12px;
+    box-shadow: 0 8px 14px rgba(245, 158, 85, 0.28);
+  }
+
+  .calendar-action-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .calendar-action-badge {
+    border-radius: 999px;
+    padding: 4px 8px;
+    font-size: 11px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .calendar-action-badge.stars {
+    background: #ebf9de;
+    color: #53a33a;
+    border: 1px solid #bfe2a6;
+  }
+
+  .calendar-action-badge.jump {
+    background: #ffe5ee;
+    color: #f06b95;
+    border: 1px solid #ffc4d8;
+  }
+
+  .calendar-action-badge.clap {
+    background: #eaf4ff;
+    color: #4a8af4;
+    border: 1px solid #c5dafd;
+  }
+
+  .calendar-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 14px 4px 0;
+    color: #475569;
+    font-size: 14px;
+  }
+
+  .calendar-legend span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .calendar-legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  .calendar-footer-note {
+    margin-top: 14px;
+    padding: 12px 18px;
+    border-radius: 999px;
+    border: 2px dashed #ffd8a8;
+    background: rgba(255, 252, 243, 0.95);
+    color: #d38a41;
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .report-right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .report-today-card {
+    border-color: var(--border-green);
+    background: var(--bg-green);
+  }
+
+  .report-card-title {
+    text-align: center;
+    font-size: 18px;
+    color: #efb24d;
+    margin-bottom: 14px;
+  }
+
+  .report-today-layout {
+    display: flex;
+    gap: 18px;
+    align-items: stretch;
+  }
+
+  .report-today-image {
+    width: 170px;
+    min-width: 170px;
+    border-radius: 24px;
+    border: 2px solid #ccead8;
+    background: #fff;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+
+  .report-today-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .report-today-copy {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .report-today-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .report-action-pill {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-radius: 999px;
+    padding: 11px 16px;
+    font-size: 15px;
+    background: #fff;
+    border: 2px solid #d9ebff;
+    color: #46556e;
+  }
+
+  .report-action-pill.stars {
+    border-color: #bfe2a6;
+    color: #53a33a;
+  }
+
+  .report-action-pill.jump {
+    border-color: #ffc4d8;
+    color: #f06b95;
+  }
+
+  .report-action-pill.clap {
+    border-color: #c5dafd;
+    color: #4a8af4;
+  }
+
+  .report-summary-row {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .report-summary-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #f7d7a6;
+    color: #cf974c;
+    font-size: 14px;
+  }
+
+  .report-achievement-card {
+    border-color: var(--border-purple);
+    background: var(--bg-purple);
+  }
+
+  .report-stat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .report-stat-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 18px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 2px solid #e2d8f5;
+  }
+
+  .report-stat-item:nth-child(1) { border-color: #ddd1ff; }
+  .report-stat-item:nth-child(2) { border-color: #d9ebff; }
+  .report-stat-item:nth-child(3) { border-color: #d8f0c7; }
+  .report-stat-item:nth-child(4) { border-color: #ffd2dd; }
+
+  .report-stat-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    color: #475569;
+    font-size: 16px;
+  }
+
+  .report-stat-value {
+    font-size: 20px;
+    color: #7c63d8;
+  }
+
+  .report-empty {
+    padding: 18px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 2px dashed #d8def5;
+    color: #6b7a98;
+    text-align: center;
+    font-size: 15px;
+  }
+
+  .login-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(205, 223, 248, 0.42);
+    backdrop-filter: blur(6px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 300;
+    padding: 20px;
+  }
+
+  .login-overlay.show {
+    display: flex;
+  }
+
+  .login-card {
+    width: min(100%, 420px);
+    border: 3px solid #a8c7ff;
+    border-radius: 34px;
+    background: linear-gradient(180deg, #fffefb 0%, #f4f9ff 100%);
+    box-shadow: 0 22px 48px rgba(111, 145, 212, 0.22);
+    padding: 28px 26px 24px;
+    text-align: center;
+  }
+
+  .login-card h2 {
+    margin: 0 0 10px;
+    color: var(--text-blue);
+    font-size: 28px;
+  }
+
+  .login-card p {
+    margin: 0 0 18px;
+    color: #667085;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  .login-avatar {
+    width: 82px;
+    height: 82px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    background: linear-gradient(180deg, #ffe6c9 0%, #ffd5a1 100%);
+    display: grid;
+    place-items: center;
+    font-size: 44px;
+    box-shadow: 0 12px 24px rgba(255, 196, 120, 0.26);
+  }
+
+  .login-input {
+    width: 100%;
+    border: 2px solid #c8dbff;
+    border-radius: 18px;
+    background: #fff;
+    padding: 14px 16px;
+    font-family: 'ZCOOL KuaiLe', 'Baloo 2', cursive, sans-serif;
+    font-size: 18px;
+    color: #334155;
+    outline: none;
+    box-shadow: inset 0 2px 6px rgba(161, 196, 253, 0.12);
+  }
+
+  .login-input:focus {
+    border-color: #86b2e5;
+    box-shadow: 0 0 0 4px rgba(168, 199, 255, 0.2);
+  }
+
+  .login-actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+
+  .login-tip {
+    margin-top: 12px;
+    color: #8ba0c3;
+    font-size: 13px;
+  }
+
+  .result-modal {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(92, 115, 166, 0.28);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    padding: 20px;
+  }
+
+  .result-modal.show {
+    display: flex;
+  }
+
+  .result-card {
+    width: min(480px, 100%);
+    background: linear-gradient(180deg, #fffefb 0%, #fff7ea 100%);
+    border: 3px solid #ffd38d;
+    border-radius: 36px;
+    padding: 28px 28px 24px;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(255, 190, 110, 0.25);
+    animation: modalPop 0.35s ease;
+  }
+
+  @keyframes modalPop {
+    0% { transform: scale(0.82) translateY(12px); opacity: 0; }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+  }
+
+  .result-title {
+    color: #ef965d;
+    font-size: 30px;
+    margin-bottom: 12px;
+  }
+
+  .result-stars {
+    font-size: 44px;
+    margin-bottom: 12px;
+  }
+
+  .result-score {
+    color: #409975;
+    font-size: 42px;
+    margin-bottom: 10px;
+  }
+
+  .result-desc {
+    color: #6c7da0;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .result-actions {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 1120px) {
+    .main-layout {
+      flex-direction: column;
+    }
+
+    .capture-stage,
+  }
+
+  @media (max-width: 720px) {
+    body {
+      padding: 12px;
+    }
+
+    .header {
+      padding: 14px 18px;
+    }
+
+    .header-logo {
+      font-size: 22px;
+      flex-wrap: wrap;
+    }
+
+    .user-profile {
+      font-size: 16px;
+    }
+
+    .capture-stage {
+      min-height: 360px;
+    }
+
+    .feedback-item {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .item-label {
+      width: auto;
+    }
+
+    .progress-bg {
+      min-width: 100%;
+      margin: 0;
+      order: 3;
+    }
+  }
+</style>
+</head>
+<body>
+<div class="app-container" id="trainingPage">
+  <header class="header sketch-box">
+    <div class="header-logo">
+      &#9729;&#65039; &#x661F;&#x52A8;&#x5C0F;&#x5C4B; &#11088;
+    </div>
+    <div class="user-profile">
+      <button class="user-profile-btn" id="openLoginBtn" type="button">
+        <div class="avatar">&#x1F9D2;</div>
+        <span class="user-name-text"><strong id="childNameDisplay">&#x5C0F;&#x660E;&#x540C;&#x5B66;</strong> <span>&#9660;</span></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="section-title">
+    &#11088; &#x8FD0;&#x52A8;&#x8BAD;&#x7EC3; &#9729;&#65039;
+  </div>
+
+  <div class="main-layout">
+    <div class="left-col">
+      <div class="sketch-box capture-area">
+        <div class="card-title">&#10024; &#x52A8;&#x4F5C;&#x6355;&#x6349;&#x533A; &#10024;</div>
+        <div class="capture-stage" id="captureStage">
+          <video id="cameraVideo" class="capture-video" autoplay playsinline muted></video>
+          <canvas id="poseCanvas" class="capture-canvas"></canvas>
+
+          <div class="placeholder-state" id="placeholderState">
+            <img class="placeholder-figure" id="placeholderImage" src="./boy_star.png" alt="训练动作示意图">
+            <div id="placeholderText">&#x70B9;&#x51FB;&#x201C;&#x5F00;&#x59CB;&#x8BAD;&#x7EC3;&#x201D;&#x540E;&#x6253;&#x5F00;&#x6444;&#x50CF;&#x5934;&#xFF0C;&#x4E00;&#x8D77;&#x6765;&#x6458;&#x661F;&#x661F;&#x5427;</div>
+          </div>
+
+          <div class="stage-ui">
+            <div class="camera-tip show" id="cameraTip">&#x8BF7;&#x5148;&#x5141;&#x8BB8;&#x6444;&#x50CF;&#x5934;&#x6743;&#x9650;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x80FD;&#x5F00;&#x59CB;&#x52A8;&#x4F5C;&#x6355;&#x6349;&#x5566;&#xFF5E;</div>
+            <div class="timer-chip" id="timerChip">30s</div>
+            <div class="top-stars" id="topStars"></div>
+            <div class="beat-track" id="beatTrack"></div>
+            <div class="celebration-layer" id="celebrationLayer"></div>
+            <div class="countdown-overlay" id="countdownOverlay">3</div>
+            <div class="warning-bubble" id="distanceWarning">&#x8BF7;&#x79BB;&#x5C4F;&#x5E55;&#x8FDC;&#x4E00;&#x70B9;&#x54E6;~</div>
+            <button class="resume-training-btn" id="resumeTrainingBtn">&#9654; &#x7EE7;&#x7EED;</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sketch-box helper-area">
+        <div style="font-size:30px;">&#11088;</div>
+        <div class="helper-bubble" id="helperText">&#x628A;&#x5C0F;&#x624B;&#x4E3E;&#x9AD8;&#x9AD8;&#xFF0C;&#x78B0;&#x5230;&#x4E0A;&#x65B9;&#x661F;&#x661F;&#xFF0C;&#x661F;&#x661F;&#x5C31;&#x4F1A;&#x98DE;&#x8D70;&#x5566;&#xFF5E;</div>
+        <div style="font-size:40px;">&#x1F9F8;</div>
+      </div>
+
+      <div class="btn-container">
+        <button class="btn btn-green" id="startTrainingBtn">&#9654; &#x5F00;&#x59CB;&#x8BAD;&#x7EC3;</button>
+      </div>
+    </div>
+
+    <div class="right-col">
+      <div class="sketch-box today-action">
+        <div class="action-thumb">
+          <img src="./boy_star.png" alt="训练动作示意图" id="actionThumbImage">
+        </div>
+        <div class="action-info">
+          <div style="color:#6d9eed; font-size:14px; margin-bottom:5px;">&#10024; &#x4ECA;&#x65E5;&#x8BAD;&#x7EC3;&#x52A8;&#x4F5C; &#10024;</div>
+          <h3 id="actionTitle">&#x4F38;&#x624B;&#x6458;&#x661F;&#x661F;</h3>
+          <div class="tags">
+            <span class="tag tag-green" id="actionChallengeTag">&#x1F3C3; 30s &#x6311;&#x6218;</span>
+            <span class="tag tag-blue" id="actionOrderTag">&#x7B2C;1&#x4E2A;&#x52A8;&#x4F5C;</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sketch-box feedback-area">
+        <div class="feedback-title">&#10024; &#x8BC6;&#x522B;&#x53CD;&#x9988; &#10024;</div>
+
+        <div class="feedback-list">
+          <div class="feedback-item" style="background-color: #fffaf0; border-color: #f7c677;">
+            <div class="item-icon">&#11088;</div>
+            <div class="item-label" id="scoreLabel">&#x6293;&#x5230;&#x661F;&#x661F;</div>
+            <div class="item-value" id="scoreValue">0 &#x9897;</div>
+          </div>
+
+          <div class="feedback-item">
+            <div class="item-icon">&#x1F3AF;</div>
+            <div class="item-label" id="progressLabel">&#x6293;&#x661F;&#x8282;&#x594F;</div>
+            <div class="progress-bg"><div class="progress-bar" id="progressBar"></div></div>
+            <div class="item-value" id="progressValue">0%</div>
+          </div>
+
+          <div class="feedback-item" style="background-color: #f7fbff; border-color: #b9d4ff;">
+            <div class="item-icon">&#x1F60A;</div>
+            <div class="item-label">&#x8868;&#x60C5;&#x72B6;&#x6001;</div>
+            <div class="item-value" id="facialEmotion">&#x672A;&#x5F00;&#x59CB;&#x8BC6;&#x522B;</div>
+          </div>
+
+          <div class="feedback-item" style="background-color: #f8fff9; border-color: #b9e4c8;">
+            <div class="item-icon">&#x1F3A4;</div>
+            <div class="item-label" id="voiceLabel">&#x8BED;&#x97F3;&#x72B6;&#x6001;</div>
+            <div class="item-value" id="voiceEmotion">&#x672A;&#x5F00;&#x59CB;&#x5206;&#x6790;</div>
+          </div>
+
+          <div class="feedback-item" style="background-color: #fffdf8; border-color: #fbd28b;">
+            <div class="item-icon">&#x1F4A1;</div>
+            <div class="item-label">&#x52A8;&#x4F5C;&#x5EFA;&#x8BAE;</div>
+            <div class="item-value" id="systemAdvice">&#x628A;&#x624B;&#x81C2;&#x4E3E;&#x9AD8;&#x4E00;&#x70B9;&#xFF0C;&#x53BB;&#x78B0;&#x4E0A;&#x65B9;&#x661F;&#x661F;&#x5427;</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="btn-container" id="rightActionButtons">
+        <button class="btn btn-yellow" id="resetTrainingBtn"><span class="btn-content"><span class="btn-icon">&#10227;</span><span class="btn-label">&#x91CD;&#x65B0;&#x5F00;&#x59CB;</span></span></button>
+        <button class="btn btn-green" id="nextActionBtn"><span class="btn-content"><span class="btn-icon">&#10145;</span><span class="btn-label">&#x4E0B;&#x4E00;&#x4E2A;&#x52A8;&#x4F5C;</span></span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="floating-widget">
+    <div class="popup-menu" id="toolMenu">
+      <div class="tool-btn" id="openReportBtn">
+        <div class="tool-icon-box">&#x1F4CA;</div>
+        <span>&#x8BAD;&#x7EC3;&#x62A5;&#x544A;</span>
+      </div>
+    </div>
+
+    <div class="star-trigger" id="starTrigger">&#11088;</div>
+  </div>
+</div>
+
+<div class="report-page page-hidden" id="reportPage">
+  <div class="sketch-box report-header">
+    <div class="report-logo">
+      <div class="report-logo-star">&#11088;</div>
+      <span>&#x661F;&#x52A8;&#x5C0F;&#x5C4B;</span>
+    </div>
+    <div class="report-profile">
+      <div class="avatar">&#x1F9D2;</div>
+      <div class="report-profile-copy">
+        <strong id="reportChildName">&#x5C0F;&#x660E;&#x540C;&#x5B66;</strong>
+        <small id="reportEncouragement">&#x52A0;&#x6CB9;&#xFF0C;&#x4F60;&#x771F;&#x68D2;&#xFF01;</small>
+      </div>
+      <button class="report-back-btn" id="closeReportBtn">&#x2190; &#x8FD4;&#x56DE;&#x8BAD;&#x7EC3;</button>
+    </div>
+  </div>
+
+  <div class="report-section-title">&#11088; &#x8BAD;&#x7EC3;&#x65E5;&#x5386; &#9729;&#65039;</div>
+
+  <div class="report-layout">
+    <div class="sketch-box calendar-card report-shell">
+      <div class="calendar-card-header">&#10024; &#x672C;&#x6708;&#x8BAD;&#x7EC3;&#x65E5;&#x5386; &#10024;</div>
+      <div class="calendar-toolbar">
+        <button class="calendar-nav-btn" id="calendarPrevBtn">&#x2039;</button>
+        <div class="calendar-month-label" id="calendarMonthLabel">4&#x6708;</div>
+        <button class="calendar-nav-btn" id="calendarNextBtn">&#x203A;</button>
+      </div>
+      <div class="calendar-weekdays">
+        <div>&#x4E00;</div>
+        <div>&#x4E8C;</div>
+        <div>&#x4E09;</div>
+        <div>&#x56DB;</div>
+        <div>&#x4E94;</div>
+        <div>&#x516D;</div>
+        <div>&#x65E5;</div>
+      </div>
+      <div class="calendar-grid" id="calendarGrid"></div>
+      <div class="calendar-legend">
+        <span><i class="calendar-legend-dot" style="background:#53a33a;"></i>&#x4F38;&#x624B;&#x6458;&#x661F;&#x661F;</span>
+        <span><i class="calendar-legend-dot" style="background:#4a8af4;"></i>&#x62CD;&#x624B;&#x5C0F;&#x8282;&#x594F;</span>
+        <span><i class="calendar-legend-dot" style="background:#f06b95;"></i>&#x5C0F;&#x5154;&#x8DF3;&#x4E00;&#x8DF3;</span>
+      </div>
+      <div class="calendar-footer-note" id="calendarFooterNote">&#x5F69;&#x8272;&#x6807;&#x7B7E;&#x8868;&#x793A;&#x5F53;&#x5929;&#x771F;&#x5B9E;&#x5B8C;&#x6210;&#x7684;&#x8BAD;&#x7EC3;&#x52A8;&#x4F5C;&#x54E6;&#xFF01;</div>
+    </div>
+
+    <div class="report-right-col">
+      <div class="sketch-box report-today-card report-shell">
+        <div class="report-card-title">&#10024; &#x4ECA;&#x65E5;&#x8BAD;&#x7EC3; &#10024;</div>
+        <div class="report-today-layout">
+          <div class="report-today-image">
+            <img id="reportTodayImage" src="./boy_star.png" alt="今日训练">
+          </div>
+          <div class="report-today-copy">
+            <div class="report-today-list" id="reportTodayList"></div>
+            <div class="report-summary-row">
+              <div class="report-summary-chip" id="reportTodayActionCount">&#11088; 0 &#x4E2A;&#x52A8;&#x4F5C;</div>
+              <div class="report-summary-chip" id="reportTodayStatus">&#9989; &#x4ECA;&#x65E5;&#x8FD8;&#x6CA1;&#x5F00;&#x7EC3;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sketch-box report-achievement-card report-shell">
+        <div class="report-card-title">&#11088; &#x672C;&#x5468;&#x5C0F;&#x6210;&#x5C31; &#11088;</div>
+        <div class="report-stat-list">
+          <div class="report-stat-item">
+            <div class="report-stat-label">&#x1F4C5; &#x672C;&#x5468;&#x8BAD;&#x7EC3;</div>
+            <div class="report-stat-value" id="reportWeekDays">0 &#x5929;</div>
+          </div>
+          <div class="report-stat-item">
+            <div class="report-stat-label">&#x1F3C6; &#x7D2F;&#x8BA1;&#x52A8;&#x4F5C;</div>
+            <div class="report-stat-value" id="reportTotalSessions">0 &#x6B21;</div>
+          </div>
+          <div class="report-stat-item">
+            <div class="report-stat-label">&#11088; &#x6700;&#x5E38;&#x505A;&#x52A8;&#x4F5C;</div>
+            <div class="report-stat-value" id="reportFavoriteAction">&#x6682;&#x65E0;</div>
+          </div>
+          <div class="report-stat-item">
+            <div class="report-stat-label">&#x1F525; &#x8FDE;&#x7EED;&#x6253;&#x5361;</div>
+            <div class="report-stat-value" id="reportStreakDays">0 &#x5929;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <div class="login-avatar">&#x1F9D2;</div>
+    <h2>&#x6B22;&#x8FCE;&#x6765;&#x5230;&#x661F;&#x52A8;&#x5C0F;&#x5C4B;</h2>
+    <p>&#x7ED9;&#x81EA;&#x5DF1;&#x8D77;&#x4E00;&#x4E2A;&#x6635;&#x79F0;&#x5427;&#xFF0C;&#x8FD9;&#x6837;&#x8BAD;&#x7EC3;&#x62A5;&#x544A;&#x548C;&#x9875;&#x9762;&#x53F3;&#x4E0A;&#x89D2;&#x90FD;&#x4F1A;&#x540C;&#x6B65;&#x663E;&#x793A;&#x54E6;&#xFF5E;</p>
+    <input class="login-input" id="childNameInput" type="text" maxlength="12" placeholder="&#x4F8B;&#x5982;&#xFF1A;&#x5C0F;&#x661F;&#x661F;">
+    <div class="login-actions">
+      <button class="btn btn-green" id="saveChildNameBtn" type="button">&#x2705; &#x5B8C;&#x6210;&#x547D;&#x540D;</button>
+      <button class="btn btn-yellow" id="skipLoginBtn" type="button">&#x2728; &#x7A0D;&#x540E;&#x518D;&#x8BF4;</button>
+    </div>
+    <div class="login-tip">&#x540E;&#x9762;&#x70B9;&#x51FB;&#x53F3;&#x4E0A;&#x89D2;&#x540D;&#x5B57;&#x4E5F;&#x53EF;&#x4EE5;&#x518D;&#x4FEE;&#x6539;&#x54E6;</div>
+  </div>
+</div>
+
+<div class="result-modal" id="resultModal">
+  <div class="result-card">
+    <div class="result-title">&#x8BAD;&#x7EC3;&#x5B8C;&#x6210;&#x5566;&#xFF01;</div>
+    <div class="result-stars">&#11088; &#127775; &#11088;</div>
+    <div class="result-score" id="resultScore">0 &#x9897;</div>
+    <div class="result-desc" id="resultDesc">&#x4ECA;&#x5929;&#x4E5F;&#x662F;&#x5F88;&#x4F1A;&#x6458;&#x661F;&#x661F;&#x7684;&#x5C0F;&#x670B;&#x53CB;&#xFF5E;</div>
+    <div class="result-actions">
+      <button class="btn btn-green" id="playAgainBtn">&#9654; &#x518D;&#x73A9;&#x4E00;&#x6B21;</button>
+      <button class="btn btn-yellow" id="closeResultBtn">&#x6211;&#x77E5;&#x9053;&#x5566;</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  import { PoseLandmarker, FaceLandmarker, FilesetResolver } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/+esm';
+
+  const ui = {
+    trainingPage: document.getElementById('trainingPage'),
+    reportPage: document.getElementById('reportPage'),
+    loginOverlay: document.getElementById('loginOverlay'),
+    starTrigger: document.getElementById('starTrigger'),
+    toolMenu: document.getElementById('toolMenu'),
+    openReportBtn: document.getElementById('openReportBtn'),
+    openLoginBtn: document.getElementById('openLoginBtn'),
+    childNameDisplay: document.getElementById('childNameDisplay'),
+    childNameInput: document.getElementById('childNameInput'),
+    saveChildNameBtn: document.getElementById('saveChildNameBtn'),
+    skipLoginBtn: document.getElementById('skipLoginBtn'),
+    startTrainingBtn: document.getElementById('startTrainingBtn'),
+    resetTrainingBtn: document.getElementById('resetTrainingBtn'),
+    playAgainBtn: document.getElementById('playAgainBtn'),
+    closeResultBtn: document.getElementById('closeResultBtn'),
+    nextActionBtn: document.getElementById('nextActionBtn'),
+    captureStage: document.getElementById('captureStage'),
+    cameraVideo: document.getElementById('cameraVideo'),
+    poseCanvas: document.getElementById('poseCanvas'),
+    placeholderState: document.getElementById('placeholderState'),
+    placeholderImage: document.getElementById('placeholderImage'),
+    placeholderText: document.getElementById('placeholderText'),
+    topStars: document.getElementById('topStars'),
+    beatTrack: document.getElementById('beatTrack'),
+    celebrationLayer: document.getElementById('celebrationLayer'),
+    countdownOverlay: document.getElementById('countdownOverlay'),
+    distanceWarning: document.getElementById('distanceWarning'),
+    resumeTrainingBtn: document.getElementById('resumeTrainingBtn'),
+    timerChip: document.getElementById('timerChip'),
+    cameraTip: document.getElementById('cameraTip'),
+    helperText: document.getElementById('helperText'),
+    actionThumbImage: document.getElementById('actionThumbImage'),
+    actionTitle: document.getElementById('actionTitle'),
+    actionChallengeTag: document.getElementById('actionChallengeTag'),
+    actionOrderTag: document.getElementById('actionOrderTag'),
+    scoreLabel: document.getElementById('scoreLabel'),
+    progressLabel: document.getElementById('progressLabel'),
+    scoreValue: document.getElementById('scoreValue'),
+    progressBar: document.getElementById('progressBar'),
+    progressValue: document.getElementById('progressValue'),
+    facialEmotion: document.getElementById('facialEmotion'),
+    voiceLabel: document.getElementById('voiceLabel'),
+    voiceEmotion: document.getElementById('voiceEmotion'),
+    systemAdvice: document.getElementById('systemAdvice'),
+    resultModal: document.getElementById('resultModal'),
+    resultScore: document.getElementById('resultScore'),
+    resultDesc: document.getElementById('resultDesc'),
+    closeReportBtn: document.getElementById('closeReportBtn'),
+    calendarPrevBtn: document.getElementById('calendarPrevBtn'),
+    calendarNextBtn: document.getElementById('calendarNextBtn'),
+    calendarMonthLabel: document.getElementById('calendarMonthLabel'),
+    calendarGrid: document.getElementById('calendarGrid'),
+    reportTodayImage: document.getElementById('reportTodayImage'),
+    reportTodayList: document.getElementById('reportTodayList'),
+    reportTodayActionCount: document.getElementById('reportTodayActionCount'),
+    reportTodayStatus: document.getElementById('reportTodayStatus'),
+    reportWeekDays: document.getElementById('reportWeekDays'),
+    reportTotalSessions: document.getElementById('reportTotalSessions'),
+    reportFavoriteAction: document.getElementById('reportFavoriteAction'),
+    reportStreakDays: document.getElementById('reportStreakDays'),
+    reportChildName: document.getElementById('reportChildName'),
+    reportEncouragement: document.getElementById('reportEncouragement')
+  };
+
+  const text = {
+    cameraNeedPermission: '\u8bf7\u5148\u5141\u8bb8\u6444\u50cf\u5934\u6743\u9650\uff0c\u6211\u4eec\u5c31\u80fd\u5f00\u59cb\u52a8\u4f5c\u6355\u6349\u5566\uff5e',
+    cameraReady: '\u955c\u5934\u51c6\u5907\u597d\u5566\uff0c\u7b49\u5012\u8ba1\u65f6\u7ed3\u675f\u5c31\u5f00\u59cb\u8bad\u7ec3\uff5e',
+    preparingModel: '\u6b63\u5728\u51c6\u5907\u52a8\u4f5c\u8bc6\u522b\u6a21\u578b\uff0c\u8bf7\u7a0d\u7b49\u4e00\u4e0b\uff5e',
+    readyCountdown: '\u51c6\u5907\u597d\u4e86\u5417\uff1f\u5012\u8ba1\u65f6\u7ed3\u675f\u5c31\u5f00\u59cb\u8bad\u7ec3\u5566\uff5e',
+    timedGameStart: '\u5012\u8ba1\u65f6\u5f00\u59cb\u5566\uff0c30\u79d2\u5185\u770b\u770b\u80fd\u6293\u5230\u591a\u5c11\u9897\u661f\u661f\uff5e',
+    restartReady: '\u53ef\u4ee5\u518d\u6b21\u70b9\u51fb\u201c\u5f00\u59cb\u8bad\u7ec3\u201d\uff0c\u91cd\u65b0\u6311\u6218\u6458\u661f\u661f\u5566\uff5e',
+    openCameraTip: '\u70b9\u51fb\u201c\u5f00\u59cb\u8bad\u7ec3\u201d\u540e\u6253\u5f00\u6444\u50cf\u5934\uff0c\u6211\u4eec\u4e00\u8d77\u6765\u505a\u52a8\u4f5c\u8bad\u7ec3\u5427\uff5e',
+    startupFailed: '\u6444\u50cf\u5934\u6216\u52a8\u4f5c\u8bc6\u522b\u52a0\u8f7d\u5931\u8d25\uff0c\u8bf7\u68c0\u67e5\u7f51\u7edc\u548c\u6d4f\u89c8\u5668\u6743\u9650',
+    startupAdvice: '\u8bf7\u5141\u8bb8\u6444\u50cf\u5934\u6743\u9650\uff0c\u5e76\u786e\u8ba4\u6d4f\u89c8\u5668\u53ef\u4ee5\u8bbf\u95ee\u6a21\u578b\u8d44\u6e90',
+    startupStatus: '\u542f\u52a8\u5931\u8d25',
+    helperDefault: '\u628a\u5c0f\u624b\u4e3e\u9ad8\u9ad8\uff0c\u78b0\u5230\u4e0a\u65b9\u661f\u661f\uff0c\u661f\u661f\u5c31\u4f1a\u98de\u8d70\u5566\uff5e',
+    distanceDefault: '\u8bf7\u4fdd\u6301\u534a\u8eab\u80fd\u5b8c\u6574\u5165\u955c',
+    adviceDefault: '\u628a\u624B\u81C2\u4E3E\u9AD8\u4E00\u70B9\uFF0C\u53BB\u78B0\u4E0A\u65B9\u661F\u661F\u5427',
+    noPose: '\u8fd8\u6ca1\u6709\u8bc6\u522b\u5230\u52a8\u4f5c\uff0c\u8bf7\u7ad9\u5230\u955c\u5934\u4e2d\u95f4',
+    noPoseHelper: '\u7ad9\u5230\u955c\u5934\u4e2d\u592e\uff0c\u628a\u5c0f\u624b\u4e3e\u8d77\u6765\uff0c\u8ddf\u7740\u63d0\u793a\u4e00\u8d77\u52a8\u4e00\u52a8\u5427\uff5e',
+    faceMissing: '\u8138\u90e8\u6ca1\u6709\u5b8c\u6574\u5165\u955c\uff0c\u5148\u628a\u5c0f\u8138\u9732\u51fa\u6765\u54e6',
+    faceMissingHelper: '\u5148\u8ba9\u773c\u775b\u548c\u5c0f\u8138\u90fd\u51fa\u73b0\u5728\u955c\u5934\u91cc\uff0c\u6211\u4eec\u518d\u7ee7\u7eed\u8bad\u7ec3\uff5e',
+    faceMissingAdvice: '\u8138\u90e8\u9700\u8981\u5b8c\u6574\u5165\u955c\uff0c\u8fd9\u6837\u624d\u4f1a\u5f00\u59cb\u8bc6\u522b\u52a8\u4f5c',
+    facialDefault: '\u672A\u5F00\u59CB\u8BC6\u522B',
+    facialLoading: '\u6B63\u5728\u52A0\u8F7D\u9762\u90E8\u6A21\u578B',
+    facialMissing: '\u672A\u8BC6\u522B\u5230\u6E05\u6670\u8868\u60C5',
+    facialHappy: '\u5FEB\u4E50 / \u8F7B\u677E',
+    facialSad: '\u60B2\u4F24 / \u4F4E\u843D',
+    facialAngry: '\u611F\u5230\u4E0D\u8010\u70E6',
+    facialSurprised: '\u60CA\u8BB6 / \u597D\u5947',
+    facialFearful: '\u7D27\u5F20 / \u5BB3\u6015',
+    facialNeutral: '\u5E73\u9759 / \u4E13\u6CE8',
+    voiceDefault: '\u672A\u5F00\u59CB\u5206\u6790',
+    voiceLoading: '\u6B63\u5728\u51C6\u5907\u9EA6\u514B\u98CE\u5206\u6790',
+    voiceQuiet: '\u5B89\u9759 / \u672A\u68C0\u6D4B\u5230\u660E\u663E\u8BF4\u8BDD',
+    voiceCalm: '\u5E73\u7A33 / \u81EA\u7136\u4EA4\u6D41',
+    voiceCheerful: '\u8F7B\u5FEB / \u60C5\u7EEA\u8F83\u597D',
+    voiceExcited: '\u5174\u594B / \u8BED\u8C03\u504F\u9AD8',
+    voiceIntense: '\u6FC0\u52A8 / \u97F3\u91CF\u8D77\u4F0F\u8F83\u5927',
+    voiceSoft: '\u8F7B\u58F0 / \u60C5\u7EEA\u504F\u6536\u655B',
+    voiceCry: '\u54ED\u6CE3 / \u96BE\u8FC7',
+    voiceMicMissing: '\u672A\u5F00\u542F\u9EA6\u514B\u98CE\uFF0C\u6682\u65F6\u65E0\u6CD5\u5206\u6790',
+    voiceMicDenied: '\u9EA6\u514B\u98CE\u6743\u9650\u672A\u5F00\u542F',
+    almostThere: '\u54c7\uff0c\u9a6c\u4e0a\u5c31\u80fd\u78b0\u5230\u661f\u661f\u5566\uff0c\u518d\u52aa\u529b\u4e00\u70b9\u70b9\uff5e',
+    keepHigher: '\u5c0f\u624b\u518d\u9ad8\u4e00\u70b9\uff0c\u5c31\u80fd\u6458\u5230\u95ea\u95ea\u7684\u661f\u661f\u5566\uff5e',
+    raiseHand: '\u8bd5\u7740\u628a\u624b\u4f38\u9ad8\u9ad8\uff0c\u53bb\u548c\u661f\u661f\u78b0\u78b0\u9762\u5427\uff5e',
+    actionHigh: '\u771f\u68d2\uff0c\u5c0f\u624b\u5df2\u7ecf\u4e3e\u5f97\u5f88\u9ad8\u5566',
+    actionMid: '\u7ee7\u7eed\u628a\u624B\u81C2\u62AC\u9AD8\uff0c\u661F\u661F\u5C31\u5728\u4E0A\u9762',
+    actionLow: '\u5148\u628a\u624b\u4e3e\u8d77\u6765\uff0c\u6211\u4eec\u51c6\u5907\u6458\u661f\u661f',
+    postureAdvice: '\u8eab\u4f53\u53ef\u4ee5\u518d\u7ad9\u76f4\u4e00\u70b9\uff0c\u773c\u775b\u770b\u5411\u524d\u65b9\u4f1a\u66f4\u597d\u54e6',
+    distanceOk: '\u8ddd\u79bb\u5408\u9002\uff0c\u53ef\u4ee5\u7ee7\u7eed\u8bad\u7ec3',
+    distanceFarther: '\u8bf7\u518d\u5f80\u540e\u7ad9\u4e00\u70b9\uff0c\u5b8c\u6574\u9732\u51fa\u4e0a\u534a\u8eab',
+    tooClose: '\u8ddd\u79bb\u8fc7\u8fd1\uff0c\u8bf7\u540e\u9000\u4e00\u70b9',
+    tooCloseAdvice: '\u8bf7\u5f80\u540e\u9000\u4e00\u70b9\uff0c\u8ba9\u5934\u90e8\u548c\u53cc\u624b\u90fd\u80fd\u88ab\u770b\u5230',
+    keepGoingAdvice: '\u4fdd\u6301\u73b0\u5728\u7684\u4f4d\u7f6e\uff0c\u7ee7\u7eed\u8ddf\u7740\u63d0\u793a\u52a8\u4f5c\u5427',
+    captureSuccess: '\u6293\u5230\u4e00\u9897\u661f\u661f\u5566\uff0c\u7ee7\u7eed\u52a0\u6cb9',
+    captureHelper: '\u592a\u68d2\u5566\uff0c\u53c8\u6458\u5230\u4e00\u9897\u661f\u661f\uff0c\u7ee7\u7eed\u4f38\u624b\u5427\uff5e',
+    niceCombo: '\u4f60\u7684\u5c0f\u624b\u6293\u5f97\u597d\u51c6\uff0c\u7ee7\u7eed\u52a0\u6cb9\uff5e',
+    refillTip: '\u661f\u661f\u53c8\u98de\u6765\u5566\uff0c\u7ee7\u7eed\u6325\u6325\u5c0f\u624b\uff5e',
+    timerRunningAdvice: '\u628a\u63e1\u8fd9 30 \u79d2\uff0c\u628a\u624b\u4f38\u9ad8\u53bb\u6293\u661f\u661f\u5427',
+    timerEnding: '\u6700\u540e 5 \u79d2\u5566\uff0c\u518d\u52aa\u529b\u4e00\u4e0b\uff5e',
+    endTimeTip: '\u65f6\u95f4\u5230\u5566\uff0c\u6211\u4eec\u6765\u770b\u770b\u5b8c\u6210\u5f97\u600e\u4e48\u6837\uff5e',
+    resultGreat: '\u54c7\uff0c\u4f60\u4eca\u5929\u6293\u5230\u4e86 {score} \u9897\u661f\u661f\uff0c\u5c0f\u624b\u53c8\u5feb\u53c8\u51c6\uff01',
+    resultGood: '\u4f60\u6293\u5230\u4e86 {score} \u9897\u661f\u661f\uff0c\u5df2\u7ecf\u8d85\u68d2\u5566\uff0c\u518d\u6765\u4e00\u5c40\u5427\uff5e',
+    resultTry: '\u4eca\u5929\u6293\u5230\u4e86 {score} \u9897\u661f\u661f\uff0c\u4e0b\u4e00\u6b21\u518d\u628a\u624b\u4e3e\u9ad8\u4e00\u70b9\uff0c\u4f1a\u66f4\u5389\u5bb3\u54e6\uff5e',
+    comfortSad: '\u522B\u7070\u5FC3\uFF0C\u4F60\u5DF2\u7ECF\u5F88\u68D2\u5566\uFF0C\u7EE7\u7EED\u7528\u4F60\u7684\u5C0F\u624B\u6458\u661F\u661F\u5427~',
+    comfortAngry: '\u4E0D\u7740\u6025\uFF0C\u6211\u4EEC\u4F11\u606F\u4E00\u5C0F\u4E0B\u5427~',
+    comfortResume: '\u6211\u4EEC\u51C6\u5907\u597D\u4E86\uFF0C\u7EE7\u7EED\u6458\u661F\u661F\u5427~'
+  };
+
+  const ACTIONS = {
+    stars: {
+      key: 'stars',
+      title: '\u4F38\u624B\u6458\u661F\u661F',
+      challengeTag: '\u{1F3C3} 30s \u6311\u6218',
+      orderTag: '\u7B2C1\u4E2A\u52A8\u4F5C',
+      duration: 30,
+      scoreLabel: '\u6293\u5230\u661F\u661F',
+      progressLabel: '\u6293\u661F\u8282\u594F',
+      voiceLabel: '\u8BED\u97F3\u72B6\u6001',
+      scoreUnit: '\u9897',
+      helperDefault: '\u628A\u5C0F\u624B\u4E3E\u9AD8\u9AD8\uFF0C\u78B0\u5230\u4E0A\u65B9\u661F\u661F\uFF0C\u661F\u661F\u5C31\u4F1A\u98DE\u8D70\u5566\uFF5E',
+      placeholderImage: './boy_star.png',
+      thumbImage: './boy_star.png',
+      placeholderText: '\u70B9\u51FB\u201C\u5F00\u59CB\u8BAD\u7EC3\u201D\u540E\u6253\u5F00\u6444\u50CF\u5934\uFF0C\u4E00\u8D77\u6765\u6458\u661F\u661F\u5427',
+      countdownTip: '\u5012\u8BA1\u65F6\u5F00\u59CB\u5566\uFF0C30\u79D2\u5185\u770B\u770B\u80FD\u6293\u5230\u591A\u5C11\u9897\u661F\u661F\uFF5E',
+      actionAdvice: '\u628A\u624B\u81C2\u4E3E\u9AD8\u4E00\u70B9\uFF0C\u53BB\u78B0\u4E0A\u65B9\u661F\u661F\u5427',
+      comfortSad: '\u522B\u7070\u5FC3\uFF0C\u4F60\u5DF2\u7ECF\u5F88\u68D2\u5566\uFF0C\u7EE7\u7EED\u7528\u4F60\u7684\u5C0F\u624B\u6458\u661F\u661F\u5427~',
+      comfortResume: '\u6211\u4EEC\u51C6\u5907\u597D\u4E86\uFF0C\u7EE7\u7EED\u6458\u661F\u661F\u5427~',
+      restartReady: '\u53EF\u4EE5\u518D\u6B21\u70B9\u51FB\u201C\u5F00\u59CB\u8BAD\u7EC3\u201D\uFF0C\u91CD\u65B0\u6311\u6218\u6458\u661F\u661F\u5566\uFF5E',
+      resultGreat: '\u54C7\uFF0C\u4F60\u4ECA\u5929\u6293\u5230\u4E86 {score} \u9897\u661F\u661F\uFF0C\u5C0F\u624B\u53C8\u5FEB\u53C8\u51C6\uFF01',
+      resultGood: '\u4F60\u6293\u5230\u4E86 {score} \u9897\u661F\u661F\uFF0C\u5DF2\u7ECF\u8D85\u68D2\u5566\uFF0C\u518D\u6765\u4E00\u5C40\u5427\uFF5E',
+      resultTry: '\u4ECA\u5929\u6293\u5230\u4E86 {score} \u9897\u661F\u661F\uFF0C\u4E0B\u4E00\u6B21\u518D\u628A\u624B\u4E3E\u9AD8\u4E00\u70B9\uFF0C\u4F1A\u66F4\u5389\u5BB3\u54E6\uFF5E'
+    },
+    jump: {
+      key: 'jump',
+      title: '\u5C0F\u5154\u8DF3\u4E00\u8DF3',
+      challengeTag: '\u{1F3C3} 30s \u6311\u6218',
+      orderTag: '\u7B2C2\u4E2A\u52A8\u4F5C',
+      duration: 30,
+      scoreLabel: '\u8DF3\u8DC3\u6B21\u6570',
+      progressLabel: '\u8DF3\u8DC3\u8282\u594F',
+      voiceLabel: '\u8BED\u97F3\u72B6\u6001',
+      scoreUnit: '\u6B21',
+      helperDefault: '\u50CF\u5C0F\u5154\u5B50\u4E00\u6837\u8F7B\u8F7B\u8DF3\uFF0C\u8DF3 2~3 \u4E0B\u5C31\u5F88\u68D2\u5566\uFF5E',
+      placeholderImage: './jump.png',
+      thumbImage: './jump.png',
+      placeholderText: '\u70B9\u51FB\u201C\u5F00\u59CB\u8BAD\u7EC3\u201D\u540E\u6253\u5F00\u6444\u50CF\u5934\uFF0C\u4E00\u8D77\u6765\u8F7B\u8F7B\u8DF3\u4E00\u8DF3\u5427',
+      countdownTip: '\u5012\u8BA1\u65F6\u5F00\u59CB\u5566\uFF0C30\u79D2\u5185\u770B\u770B\u80FD\u8DF3\u51E0\u6B21\u5C0F\u5154\u8DF3\u5427\uFF5E',
+      actionAdvice: '\u50CF\u5C0F\u5154\u5B50\u4E00\u6837\u8F7B\u8F7B\u8DF3\uFF0C\u4E0D\u8981\u8DF3\u592A\u9AD8\u54E6',
+      comfortSad: '\u522B\u7070\u5FC3\uFF0C\u4F60\u5DF2\u7ECF\u5F88\u68D2\u5566\uFF0C\u7EE7\u7EED\u50CF\u5C0F\u5154\u5B50\u4E00\u6837\u8F7B\u8F7B\u8DF3\u5427~',
+      comfortResume: '\u6211\u4EEC\u51C6\u5907\u597D\u4E86\uFF0C\u7EE7\u7EED\u8DF3\u4E00\u8DF3\u5427~',
+      restartReady: '\u53EF\u4EE5\u518D\u6B21\u70B9\u51FB\u201C\u5F00\u59CB\u8BAD\u7EC3\u201D\uFF0C\u91CD\u65B0\u6311\u6218\u5C0F\u5154\u8DF3\u5566\uFF5E',
+      resultGreat: '\u54C7\uFF0C\u4F60\u4ECA\u5929\u8DF3\u4E86 {score} \u6B21\uFF0C\u5C31\u50CF\u5C0F\u5154\u5B50\u4E00\u6837\u8F7B\u5FEB\uFF01',
+      resultGood: '\u4F60\u5DF2\u7ECF\u8DF3\u4E86 {score} \u6B21\uFF0C\u8282\u594F\u5F88\u68D2\uFF0C\u518D\u6765\u4E00\u5C40\u5427\uFF5E',
+      resultTry: '\u4ECA\u5929\u8DF3\u4E86 {score} \u6B21\uFF0C\u4E0B\u6B21\u518D\u8F7B\u8F7B\u8DF3\u9AD8\u4E00\u70B9\uFF0C\u4F1A\u66F4\u68D2\u54E6\uFF5E'
+    },
+    clap: {
+      key: 'clap',
+      title: '\u62CD\u624B\u5C0F\u8282\u594F',
+      challengeTag: '\u{1F3C3} 20s \u6311\u6218',
+      orderTag: '\u7B2C3\u4E2A\u52A8\u4F5C',
+      duration: 20,
+      scoreLabel: '\u62CD\u624B\u6B21\u6570',
+      progressLabel: '\u8282\u594F\u5339\u914D\u5EA6',
+      voiceLabel: '\u62CD\u624B\u72B6\u6001',
+      scoreUnit: '\u6B21',
+      helperDefault: '\u8DDF\u7740\u5C0F\u9F13\u70B9\u4E00\u8D77\u62CD\uFF0C\u4E00\u3001\u4E8C\uFF01\u6162\u6162\u62CD 2~3 \u4E0B\u5C31\u5F88\u68D2\u5566\uFF5E',
+      placeholderImage: './jump.png',
+      thumbImage: './jump.png',
+      placeholderText: '\u70B9\u51FB\u201C\u5F00\u59CB\u8BAD\u7EC3\u201D\u540E\u6253\u5F00\u6444\u50CF\u5934\uFF0C\u770B\u7740\u8282\u594F\u70B9\u4E00\u8D77\u6765\u62CD\u624B\u5427',
+      countdownTip: '\u5012\u8BA1\u65F6\u7ED3\u675F\u540E\uFF0C\u6211\u4EEC\u5148\u542C\u4E00\u904D\u9F13\u70B9\uFF0C\u518D\u8DDF\u7740\u4E00\u8D77\u62CD\u624B\u54E6\uFF5E',
+      actionAdvice: '\u8DDF\u7740\u8282\u594F\u70B9\u4E00\u8D77\u62CD\uFF0C\u542C\u5230\u9F13\u70B9\u518D\u5408\u638C\u54E6',
+      comfortSad: '\u522B\u7070\u5FC3\uFF0C\u4F60\u5DF2\u7ECF\u5F88\u68D2\u5566\uFF0C\u8DDF\u7740\u8282\u594F\u70B9\u6162\u6162\u62CD\u5C31\u597D~',
+      comfortResume: '\u6211\u4EEC\u51C6\u5907\u597D\u4E86\uFF0C\u7EE7\u7EED\u8DDF\u7740\u9F13\u70B9\u62CD\u624B\u5427~',
+      restartReady: '\u53EF\u4EE5\u518D\u6B21\u70B9\u51FB\u201C\u5F00\u59CB\u8BAD\u7EC3\u201D\uFF0C\u91CD\u65B0\u8DDF\u7740\u8282\u594F\u62CD\u624B\u5566\uFF5E',
+      resultGreat: '\u54C7\uFF0C\u4F60\u4ECA\u5929\u8DDF\u4E0A\u4E86 {score} \u6B21\u8282\u594F\u62CD\u624B\uFF0C\u53EF\u771F\u6709\u97F3\u4E50\u611F\uFF01',
+      resultGood: '\u4F60\u8DDF\u4E0A\u4E86 {score} \u6B21\u8282\u594F\u62CD\u624B\uFF0C\u5DF2\u7ECF\u5F88\u68D2\u5566\uFF0C\u518D\u6765\u4E00\u6B21\u5427\uFF5E',
+      resultTry: '\u4ECA\u5929\u4F60\u62CD\u4E2D\u4E86 {score} \u6B21\u8282\u594F\uFF0C\u4E0B\u6B21\u8DDF\u5F97\u518D\u7A33\u4E00\u70B9\u5C31\u4F1A\u66F4\u5389\u5BB3\u54E6\uFF5E',
+      beatPattern: [0, 700, 1400, 2100]
+    }
+  };
+
+  const canvasCtx = ui.poseCanvas.getContext('2d');
+
+  const state = {
+    childName: '\u5C0F\u661F\u661F',
+    currentActionKey: 'stars',
+    reportMonth: new Date(new Date().getFullYear(), new Date().getMonth(), 1),
+    trainingHistory: [],
+    vision: null,
+    poseLandmarker: null,
+    faceLandmarker: null,
+    cameraStarted: false,
+    detecting: false,
+    countdownRunning: false,
+    trainingActive: false,
+    timerIntervalId: null,
+    spawnTimeoutId: null,
+    secondsLeft: 30,
+    score: 0,
+    totalSpawned: 0,
+    stars: [],
+    closeWarning: false,
+    lastVideoTime: -1,
+    wristHistory: { left: [], right: [] },
+    mediaStream: null,
+    micEnabled: false,
+    audioContext: null,
+    audioAnalyser: null,
+    audioSource: null,
+    audioTimeData: null,
+    audioFloatData: null,
+    latestAudioRms: 0,
+    lastVoiceUpdateAt: 0,
+    voiceMetricsHistory: [],
+    currentFacialEmotion: '',
+    currentVoiceEmotion: '',
+    emotionPause: false,
+    jumpPhase: 'ground',
+    jumpBaselineY: null,
+    jumpPeakRise: 0,
+    clapRoundActive: false,
+    clapPhase: 'idle',
+    clapExpectedTimes: [],
+    clapUserTimes: [],
+    clapMatchedCount: 0,
+    clapTotalAccuracy: 0,
+    clapRoundsCompleted: 0,
+    clapGuideTimeouts: [],
+    clapRoundTimeoutId: null,
+    clapCurrentBeatIndex: -1,
+    lastClapAt: 0,
+    handsApartReady: true
+  };
+
+  ui.starTrigger.addEventListener('click', (event) => {
+    ui.toolMenu.classList.toggle('show');
+    event.stopPropagation();
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!ui.toolMenu.contains(event.target) && !ui.starTrigger.contains(event.target)) {
+      ui.toolMenu.classList.remove('show');
+    }
+  });
+
+  function getCurrentAction() {
+    return ACTIONS[state.currentActionKey];
+  }
+
+  function loadChildName() {
+    try {
+      return localStorage.getItem('xingdongxiaowu-child-name') || '';
+    } catch (error) {
+      console.warn('loadChildName failed', error);
+      return '';
+    }
+  }
+
+  function saveChildName(name) {
+    try {
+      localStorage.setItem('xingdongxiaowu-child-name', name);
+    } catch (error) {
+      console.warn('saveChildName failed', error);
+    }
+  }
+
+  function normalizeChildName(value) {
+    const trimmed = value.trim();
+    return trimmed.slice(0, 12) || '\u5C0F\u661F\u661F';
+  }
+
+  function syncChildNameUI() {
+    ui.childNameDisplay.textContent = state.childName;
+    ui.reportChildName.textContent = state.childName;
+    document.title = `\u661F\u52A8\u5C0F\u5C4B - ${state.childName}`;
+  }
+
+  function openLoginOverlay(prefill = state.childName) {
+    ui.childNameInput.value = prefill;
+    ui.loginOverlay.classList.add('show');
+    setTimeout(() => {
+      ui.childNameInput.focus();
+      ui.childNameInput.select();
+    }, 10);
+  }
+
+  function closeLoginOverlay() {
+    ui.loginOverlay.classList.remove('show');
+  }
+
+  function submitChildName() {
+    state.childName = normalizeChildName(ui.childNameInput.value);
+    saveChildName(state.childName);
+    syncChildNameUI();
+    closeLoginOverlay();
+  }
+
+  function getActionReportMeta(actionKey) {
+    const map = {
+      stars: { className: 'stars', icon: '\u2B50', image: './boy_star.png', title: '\u4F38\u624B\u6458\u661F\u661F' },
+      jump: { className: 'jump', icon: '\u{1F430}', image: './jump.png', title: '\u5C0F\u5154\u8DF3\u4E00\u8DF3' },
+      clap: { className: 'clap', icon: '\u266B', image: './jump.png', title: '\u62CD\u624B\u5C0F\u8282\u594F' }
+    };
+    return map[actionKey] || { className: '', icon: '\u2B50', image: './boy_star.png', title: actionKey };
+  }
+
+  function formatDateKey(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  function loadTrainingHistory() {
+    try {
+      const raw = localStorage.getItem('xingdongxiaowu-training-history-v1');
+      const parsed = raw ? JSON.parse(raw) : [];
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      console.warn('loadTrainingHistory failed', error);
+      return [];
+    }
+  }
+
+  function saveTrainingHistory() {
+    try {
+      localStorage.setItem('xingdongxiaowu-training-history-v1', JSON.stringify(state.trainingHistory));
+    } catch (error) {
+      console.warn('saveTrainingHistory failed', error);
+    }
+  }
+
+  function getUniqueActionEntries(sessions) {
+    const seen = new Map();
+    sessions.forEach((session) => {
+      if (!seen.has(session.actionKey)) {
+        seen.set(session.actionKey, session);
+      }
+    });
+    return Array.from(seen.values());
+  }
+
+  function getSessionsForDate(dateKey) {
+    return state.trainingHistory.filter((item) => item.dateKey === dateKey);
+  }
+
+  function getWeekRange(date) {
+    const start = new Date(date);
+    const day = start.getDay();
+    const offset = day === 0 ? 6 : day - 1;
+    start.setDate(start.getDate() - offset);
+    start.setHours(0, 0, 0, 0);
+    const end = new Date(start);
+    end.setDate(end.getDate() + 6);
+    end.setHours(23, 59, 59, 999);
+    return { start, end };
+  }
+
+  function computeConsecutiveDays(history) {
+    const uniqueDays = [...new Set(history.map((item) => item.dateKey))].sort();
+    if (!uniqueDays.length) {
+      return 0;
+    }
+
+    let streak = 1;
+    for (let index = uniqueDays.length - 1; index > 0; index -= 1) {
+      const current = new Date(`${uniqueDays[index]}T00:00:00`);
+      const previous = new Date(`${uniqueDays[index - 1]}T00:00:00`);
+      const diffDays = Math.round((current - previous) / 86400000);
+      if (diffDays === 1) {
+        streak += 1;
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
+
+  function recordTrainingSession() {
+    const action = getCurrentAction();
+    const todayKey = formatDateKey(new Date());
+    state.trainingHistory.push({
+      dateKey: todayKey,
+      actionKey: action.key,
+      actionTitle: action.title,
+      score: state.score,
+      progress: Number.parseInt(ui.progressValue.textContent, 10) || 0,
+      finishedAt: new Date().toISOString()
+    });
+    saveTrainingHistory();
+  }
+
+  function renderReportCalendar() {
+    const monthDate = new Date(state.reportMonth);
+    const year = monthDate.getFullYear();
+    const month = monthDate.getMonth();
+    ui.calendarMonthLabel.textContent = `${month + 1}\u6708`;
+
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const firstWeekday = (firstDay.getDay() + 6) % 7;
+    const totalCells = Math.ceil((firstWeekday + lastDay.getDate()) / 7) * 7;
+    const todayKey = formatDateKey(new Date());
+    let html = '';
+
+    for (let index = 0; index < totalCells; index += 1) {
+      const dayNumber = index - firstWeekday + 1;
+      const inMonth = dayNumber >= 1 && dayNumber <= lastDay.getDate();
+      const rowIndex = Math.floor(index / 7);
+      const cellDate = new Date(year, month, inMonth ? dayNumber : 1);
+      const dateKey = inMonth ? formatDateKey(cellDate) : '';
+      const sessions = inMonth ? getUniqueActionEntries(getSessionsForDate(dateKey)) : [];
+      const weekend = index % 7 >= 5;
+      const classes = [
+        'calendar-day',
+        !inMonth ? 'is-empty' : '',
+        weekend ? 'is-weekend' : '',
+        rowIndex === Math.ceil(totalCells / 7) - 1 ? 'day-last-row' : '',
+        dateKey === todayKey ? 'is-today' : ''
+      ].filter(Boolean).join(' ');
+      const badges = sessions.map((session) => {
+        const meta = getActionReportMeta(session.actionKey);
+        return `<div class="calendar-action-badge ${meta.className}">${session.actionTitle}</div>`;
+      }).join('');
+
+      html += `
+        <div class="${classes}">
+          ${dateKey === todayKey ? '<div class="calendar-today-badge">\u4ECA\u5929</div>' : ''}
+          <div class="calendar-day-number">${inMonth ? dayNumber : ''}</div>
+          <div class="calendar-action-badges">${badges}</div>
+        </div>
+      `;
+    }
+
+    ui.calendarGrid.innerHTML = html;
+  }
+
+  function renderTodayTrainingCard() {
+    const todaySessions = getSessionsForDate(formatDateKey(new Date()));
+    const uniqueToday = getUniqueActionEntries(todaySessions);
+    if (!uniqueToday.length) {
+      ui.reportTodayImage.src = './boy_star.png';
+      ui.reportTodayList.innerHTML = '<div class="report-empty">\u4ECA\u5929\u8FD8\u6CA1\u6709\u5B8C\u6210\u8BAD\u7EC3\uFF0C\u53BB\u62FF\u4E0B\u7B2C\u4E00\u9897\u5C0F\u661F\u661F\u5427\uFF5E</div>';
+      ui.reportTodayActionCount.textContent = '\u2B50 0 \u4E2A\u52A8\u4F5C';
+      ui.reportTodayStatus.textContent = '\u23F3 \u4ECA\u65E5\u8FD8\u6CA1\u5F00\u7EC3';
+      return;
+    }
+
+    const recent = uniqueToday[uniqueToday.length - 1];
+    ui.reportTodayImage.src = getActionReportMeta(recent.actionKey).image;
+    ui.reportTodayList.innerHTML = uniqueToday.map((session) => {
+      const meta = getActionReportMeta(session.actionKey);
+      return `
+        <div class="report-action-pill ${meta.className}">
+          <span>${session.actionTitle}</span>
+          <strong>${meta.icon}</strong>
+        </div>
+      `;
+    }).join('');
+    ui.reportTodayActionCount.textContent = `\u2B50 ${uniqueToday.length} \u4E2A\u52A8\u4F5C`;
+    ui.reportTodayStatus.textContent = `\u2705 \u5DF2\u5B8C\u6210 ${todaySessions.length} \u6B21\u8BAD\u7EC3`;
+  }
+
+  function renderWeeklyStats() {
+    const now = new Date();
+    const { start, end } = getWeekRange(now);
+    const thisWeekSessions = state.trainingHistory.filter((item) => {
+      const date = new Date(`${item.dateKey}T00:00:00`);
+      return date >= start && date <= end;
+    });
+    const uniqueWeekDays = new Set(thisWeekSessions.map((item) => item.dateKey));
+    const counts = state.trainingHistory.reduce((map, item) => {
+      map[item.actionKey] = (map[item.actionKey] || 0) + 1;
+      return map;
+    }, {});
+    const favoriteEntry = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+    const favoriteAction = favoriteEntry ? getActionReportMeta(favoriteEntry[0]).title : '\u6682\u65E0';
+    const streakDays = computeConsecutiveDays(state.trainingHistory);
+
+    ui.reportWeekDays.textContent = `${uniqueWeekDays.size} \u5929`;
+    ui.reportTotalSessions.textContent = `${state.trainingHistory.length} \u6B21`;
+    ui.reportFavoriteAction.textContent = favoriteAction;
+    ui.reportStreakDays.textContent = `${streakDays} \u5929`;
+
+    if (state.trainingHistory.length >= 6) {
+      ui.reportEncouragement.textContent = '\u52A0\u6CB9\uFF01\u4F60\u8D8A\u6765\u8D8A\u68D2\u5566\uFF01';
+    } else if (state.trainingHistory.length >= 1) {
+      ui.reportEncouragement.textContent = '\u6BCF\u5929\u4E00\u70B9\u70B9\u8FDB\u6B65\uFF0C\u4F60\u5F88\u68D2\u54E6\uFF01';
+    } else {
+      ui.reportEncouragement.textContent = '\u4ECA\u5929\u4E5F\u8981\u5143\u6C14\u6EE1\u6EE1\u5730\u5F00\u7EC3\u54E6\uFF01';
+    }
+  }
+
+  function renderReport() {
+    renderReportCalendar();
+    renderTodayTrainingCard();
+    renderWeeklyStats();
+  }
+
+  function openReportPage() {
+    ui.toolMenu.classList.remove('show');
+    renderReport();
+    ui.trainingPage.classList.add('page-hidden');
+    ui.reportPage.classList.remove('page-hidden');
+  }
+
+  function closeReportPage() {
+    ui.reportPage.classList.add('page-hidden');
+    ui.trainingPage.classList.remove('page-hidden');
+  }
+
+  function syncActionUI() {
+    const action = getCurrentAction();
+    ui.actionTitle.textContent = action.title;
+    ui.actionChallengeTag.textContent = action.challengeTag;
+    ui.actionOrderTag.textContent = action.orderTag;
+    ui.scoreLabel.textContent = action.scoreLabel;
+    ui.progressLabel.textContent = action.progressLabel;
+    ui.voiceLabel.textContent = action.voiceLabel;
+    ui.helperText.textContent = action.helperDefault;
+    ui.placeholderImage.src = action.placeholderImage;
+    ui.placeholderImage.alt = action.title;
+    ui.placeholderText.textContent = action.placeholderText;
+    ui.actionThumbImage.src = action.thumbImage;
+    ui.actionThumbImage.alt = action.title;
+    ui.systemAdvice.textContent = action.actionAdvice;
+    ui.nextActionBtn.innerHTML = '<span class="btn-content"><span class="btn-icon">\u27A1</span><span class="btn-label">\u4E0B\u4E00\u4E2A\u52A8\u4F5C</span></span>';
+    renderBeatTrack();
+  }
+
+  function setProgress(value) {
+    const percent = Math.max(0, Math.min(100, Math.round(value)));
+    ui.progressBar.style.width = `${percent}%`;
+    ui.progressValue.textContent = `${percent}%`;
+  }
+
+  function setTimer(seconds) {
+    const textValue = `${seconds}s`;
+    ui.timerChip.textContent = textValue;
+  }
+
+  function updateScore() {
+    const action = getCurrentAction();
+    ui.scoreValue.textContent = `${state.score} ${action.scoreUnit}`;
+    if (state.currentActionKey === 'stars') {
+      const remaining = state.stars.filter((star) => !star.captured).length;
+      const progressBase = Math.max(6, state.score + remaining);
+      setProgress((state.score / progressBase) * 100);
+      return;
+    }
+
+    if (state.currentActionKey === 'clap') {
+      const accuracy = state.clapRoundsCompleted > 0
+        ? state.clapTotalAccuracy / state.clapRoundsCompleted
+        : (state.score > 0 ? 35 : 0);
+      setProgress(accuracy);
+      return;
+    }
+
+    const progressBase = Math.max(4, state.score + 1);
+    setProgress((state.score / progressBase) * 100);
+  }
+
+  function clearCelebration() {
+    ui.celebrationLayer.innerHTML = '';
+  }
+
+  function triggerRewardBurst(count = 12) {
+    clearCelebration();
+    const icons = ['&#11088;', '&#127775;', '&#10024;', '&#x1F38A;'];
+
+    for (let index = 0; index < count; index += 1) {
+      const burst = document.createElement('div');
+      burst.className = 'reward-burst';
+      burst.innerHTML = icons[index % icons.length];
+      burst.style.left = `${6 + Math.random() * 86}%`;
+      burst.style.animationDelay = `${index * 0.07}s`;
+      ui.celebrationLayer.appendChild(burst);
+    }
+
+    setTimeout(clearCelebration, 2200);
+  }
+
+  function clearSpawnQueue() {
+    if (state.spawnTimeoutId) {
+      clearTimeout(state.spawnTimeoutId);
+      state.spawnTimeoutId = null;
+    }
+  }
+
+  function renderBeatTrack() {
+    const action = getCurrentAction();
+    if (state.currentActionKey !== 'clap') {
+      ui.beatTrack.classList.remove('show');
+      ui.beatTrack.innerHTML = '';
+      return;
+    }
+
+    const pattern = action.beatPattern || [];
+    ui.beatTrack.innerHTML = pattern
+      .map((_, index) => `<div class="beat-dot" data-beat-index="${index}">\u266A</div>`)
+      .join('');
+    ui.beatTrack.classList.add('show');
+  }
+
+  function setBeatDotState(index, className = '') {
+    const dots = ui.beatTrack.querySelectorAll('.beat-dot');
+    dots.forEach((dot, dotIndex) => {
+      if (dotIndex === index) {
+        dot.classList.add(className || 'active');
+      } else if (className === 'active') {
+        dot.classList.remove('active');
+      }
+    });
+  }
+
+  function clearBeatDotState() {
+    ui.beatTrack.querySelectorAll('.beat-dot').forEach((dot) => {
+      dot.classList.remove('active', 'hit', 'missed');
+    });
+  }
+
+  function clearClapTimers() {
+    state.clapGuideTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
+    state.clapGuideTimeouts = [];
+    if (state.clapRoundTimeoutId) {
+      clearTimeout(state.clapRoundTimeoutId);
+      state.clapRoundTimeoutId = null;
+    }
+    state.clapRoundActive = false;
+    state.clapPhase = 'idle';
+  }
+
+  function resetClapState() {
+    clearClapTimers();
+    state.clapExpectedTimes = [];
+    state.clapUserTimes = [];
+    state.clapMatchedCount = 0;
+    state.clapTotalAccuracy = 0;
+    state.clapRoundsCompleted = 0;
+    state.clapCurrentBeatIndex = -1;
+    state.lastClapAt = 0;
+    state.handsApartReady = true;
+    clearBeatDotState();
+  }
+
+  function playTickSound() {
+    const context = state.audioContext;
+    if (!context) {
+      return;
+    }
+
+    if (context.state === 'suspended') {
+      context.resume();
+    }
+
+    const oscillator = context.createOscillator();
+    const gainNode = context.createGain();
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(620, context.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(140, context.currentTime + 0.09);
+    gainNode.gain.setValueAtTime(0.18, context.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.1);
+    oscillator.connect(gainNode);
+    gainNode.connect(context.destination);
+    oscillator.start();
+    oscillator.stop(context.currentTime + 0.1);
+  }
+
+  function finishClapRound() {
+    if (state.currentActionKey !== 'clap' || !state.clapRoundActive) {
+      return;
+    }
+
+    state.clapRoundActive = false;
+    state.clapPhase = 'review';
+    state.clapCurrentBeatIndex = -1;
+    const totalBeats = state.clapExpectedTimes.length || 1;
+    const accuracy = Math.round((state.clapMatchedCount / totalBeats) * 100);
+    state.clapTotalAccuracy += accuracy;
+    state.clapRoundsCompleted += 1;
+    updateScore();
+
+    if (accuracy >= 80) {
+      ui.helperText.textContent = '\u8282\u594F\u62CD\u5F97\u771F\u51C6\uFF0C\u6211\u4EEC\u518D\u6765\u4E00\u7EC4\u5427\uFF5E';
+      ui.systemAdvice.textContent = '\u5F88\u51C6\u54E6\uFF0C\u4FDD\u6301\u8FD9\u4E2A\u8282\u594F\u5C31\u5BF9\u5566';
+      triggerRewardBurst(6);
+    } else if (state.clapMatchedCount === 0) {
+      ui.helperText.textContent = '\u542C\u5230\u9F13\u70B9\u518D\u5408\u638C\uFF0C\u6211\u4EEC\u518D\u8BD5\u4E00\u6B21\uFF5E';
+      ui.systemAdvice.textContent = '\u5148\u542C\u6E05\u695A\u9F13\u70B9\uFF0C\u518D\u628A\u53CC\u624B\u8F7B\u8F7B\u62CD\u5728\u4E00\u8D77';
+    } else {
+      ui.helperText.textContent = '\u5DF2\u7ECF\u8DDF\u4E0A\u4E00\u90E8\u5206\u8282\u594F\u5566\uFF0C\u7EE7\u7EED\u52A0\u6CB9\uFF5E';
+    }
+
+    ui.beatTrack.querySelectorAll('.beat-dot').forEach((dot) => {
+      if (!dot.classList.contains('hit')) {
+        dot.classList.add('missed');
+      }
+    });
+    state.clapGuideTimeouts.push(setTimeout(() => {
+      clearBeatDotState();
+    }, 520));
+    if (state.trainingActive && state.secondsLeft > 4 && !state.emotionPause) {
+      state.clapRoundTimeoutId = setTimeout(() => {
+        startClapRound();
+      }, 1100);
+    }
+  }
+
+  function startClapRound() {
+    const action = getCurrentAction();
+    if (state.currentActionKey !== 'clap' || !state.trainingActive || state.emotionPause) {
+      return;
+    }
+
+    clearClapTimers();
+    clearBeatDotState();
+    state.clapRoundActive = true;
+    state.clapPhase = 'demo';
+    state.clapExpectedTimes = [];
+    state.clapUserTimes = [];
+    state.clapMatchedCount = 0;
+    state.clapCurrentBeatIndex = -1;
+    state.handsApartReady = true;
+    ui.helperText.textContent = '\u5148\u542C\u4E00\u904D\u9F13\u70B9\uFF0C\u7B49\u4F1A\u513F\u7167\u7740\u8282\u594F\u62CD\u624B\u54E6\uFF5E';
+    ui.systemAdvice.textContent = '\u8DDF\u4F4F\u53D1\u5149\u7684\u8282\u594F\u70B9\uFF0C\u542C\u5230\u58F0\u97F3\u518D\u62CD\u624B';
+
+    const beatPattern = action.beatPattern || [];
+    beatPattern.forEach((offset, index) => {
+      const timeoutId = setTimeout(() => {
+        clearBeatDotState();
+        setBeatDotState(index, 'active');
+        playTickSound();
+        setTimeout(() => {
+          const dot = ui.beatTrack.querySelectorAll('.beat-dot')[index];
+          dot?.classList.remove('active');
+        }, 220);
+      }, offset);
+      state.clapGuideTimeouts.push(timeoutId);
+    });
+
+    const listenDelay = (beatPattern[beatPattern.length - 1] || 0) + 900;
+    state.clapGuideTimeouts.push(setTimeout(() => {
+      state.clapPhase = 'listen';
+      const baseTime = performance.now() + 320;
+      state.clapExpectedTimes = beatPattern.map((offset) => baseTime + offset);
+      ui.cameraTip.textContent = '\u73B0\u5728\u8F6E\u5230\u4F60\u5566\uFF0C\u8DDF\u7740\u540C\u6837\u7684\u8282\u594F\u62CD\u624B\u5427\uFF5E';
+      ui.cameraTip.classList.add('show');
+      ui.helperText.textContent = '\u770B\u7740\u4E0A\u65B9\u7684\u8282\u594F\u70B9\u4E00\u4E2A\u4E2A\u4EAE\u8D77\u6765\u62CD\u624B\u5427\uFF5E';
+
+      state.clapExpectedTimes.forEach((expectedTime, index) => {
+        const pulseDelay = Math.max(0, expectedTime - performance.now());
+        state.clapGuideTimeouts.push(setTimeout(() => {
+          state.clapCurrentBeatIndex = index;
+          clearBeatDotState();
+          setBeatDotState(index, 'active');
+          setTimeout(() => {
+            const dot = ui.beatTrack.querySelectorAll('.beat-dot')[index];
+            dot?.classList.remove('active');
+            if (state.clapCurrentBeatIndex === index) {
+              state.clapCurrentBeatIndex = -1;
+            }
+          }, 230);
+        }, pulseDelay));
+      });
+
+      const lastExpected = state.clapExpectedTimes[state.clapExpectedTimes.length - 1] || performance.now();
+      state.clapRoundTimeoutId = setTimeout(() => {
+        finishClapRound();
+      }, Math.max(1400, lastExpected - performance.now() + 820));
+    }, listenDelay));
+  }
+
+  function getAvailableStarPosition() {
+    for (let attempt = 0; attempt < 24; attempt += 1) {
+      const x = 10 + Math.random() * 78;
+      const y = 2 + Math.random() * 4.5;
+      const tooClose = state.stars.some((star) => {
+        if (star.captured) {
+          return false;
+        }
+        return Math.abs(star.x - x / 100) < 0.13;
+      });
+
+      if (!tooClose) {
+        return { x, y };
+      }
+    }
+
+    return { x: 14 + Math.random() * 72, y: 2 + Math.random() * 4.5 };
+  }
+
+  function spawnStar() {
+    const position = getAvailableStarPosition();
+    const starElement = document.createElement('div');
+    starElement.className = 'star spawning';
+    starElement.innerHTML = '&#11088;';
+    starElement.style.left = `${position.x}%`;
+    starElement.style.top = `${position.y}%`;
+    starElement.style.animationDelay = `${Math.random() * 0.45}s`;
+    ui.topStars.appendChild(starElement);
+
+    const star = {
+      id: `${Date.now()}-${Math.random()}`,
+      x: position.x / 100,
+      y: (position.y + 18) / 100,
+      captured: false,
+      hoverFrames: 0,
+      element: starElement
+    };
+
+    state.stars.push(star);
+    state.totalSpawned += 1;
+    setTimeout(() => starElement.classList.remove('spawning'), 550);
+    updateScore();
+  }
+
+  function createStars() {
+    ui.topStars.innerHTML = '';
+    state.stars = [];
+    state.totalSpawned = 0;
+    if (state.currentActionKey === 'stars') {
+      for (let index = 0; index < 4; index += 1) {
+        spawnStar();
+      }
+      return;
+    }
+
+    if (state.currentActionKey === 'clap') {
+      const decorations = [
+        { left: '5%', top: '14%', icon: '\u266B' },
+        { left: '18%', top: '28%', icon: '\u2B50' },
+        { left: '54%', top: '12%', icon: '\u266A' },
+        { left: '82%', top: '26%', icon: '\u2B50' }
+      ];
+      decorations.forEach((item, index) => {
+        const starElement = document.createElement('div');
+        starElement.className = 'star';
+        starElement.innerHTML = item.icon;
+        starElement.style.left = item.left;
+        starElement.style.top = item.top;
+        starElement.style.animationDelay = `${index * 0.2}s`;
+        ui.topStars.appendChild(starElement);
+      });
+      return;
+    }
+
+    const decorations = [
+      { left: '10%', top: '16%', icon: '\u2B50' },
+      { left: '46%', top: '10%', icon: '\u2B50' },
+      { left: '82%', top: '18%', icon: '\u2B50' }
+    ];
+    decorations.forEach((item, index) => {
+      const starElement = document.createElement('div');
+      starElement.className = 'star';
+      starElement.innerHTML = item.icon;
+      starElement.style.left = item.left;
+      starElement.style.top = item.top;
+      starElement.style.animationDelay = `${index * 0.2}s`;
+      ui.topStars.appendChild(starElement);
+    });
+  }
+
+  function resetJumpState() {
+    state.jumpPhase = 'ground';
+    state.jumpBaselineY = null;
+    state.jumpPeakRise = 0;
+  }
+
+  function switchAction(nextKey) {
+    if (state.currentActionKey === nextKey) {
+      return;
+    }
+    state.currentActionKey = nextKey;
+    syncActionUI();
+    resetTrainingState();
+    ui.cameraTip.textContent = state.cameraStarted ? getCurrentAction().placeholderText : text.cameraNeedPermission;
+    ui.cameraTip.classList.add('show');
+  }
+
+  function toggleNextAction() {
+    switchAction(
+      state.currentActionKey === 'stars'
+        ? 'jump'
+        : state.currentActionKey === 'jump'
+          ? 'clap'
+          : 'stars'
+    );
+  }
+
+  function scheduleRefillIfNeeded() {
+    if (!state.trainingActive || state.spawnTimeoutId) {
+      return;
+    }
+
+    const remaining = state.stars.filter((star) => !star.captured).length;
+    if (remaining > 2) {
+      return;
+    }
+
+    let toSpawn = 2;
+    ui.helperText.textContent = text.refillTip;
+
+    const addStar = () => {
+      if (!state.trainingActive || toSpawn <= 0) {
+        state.spawnTimeoutId = null;
+        return;
+      }
+
+      spawnStar();
+      toSpawn -= 1;
+      if (toSpawn > 0) {
+        state.spawnTimeoutId = setTimeout(addStar, 850);
+      } else {
+        state.spawnTimeoutId = null;
+      }
+    };
+
+    state.spawnTimeoutId = setTimeout(addStar, 600);
+  }
+
+  function stopGameTimer() {
+    if (state.timerIntervalId) {
+      clearInterval(state.timerIntervalId);
+      state.timerIntervalId = null;
+    }
+  }
+
+  function pauseTrainingForEmotion(message) {
+    if (!state.trainingActive || state.emotionPause) {
+      ui.cameraTip.textContent = message;
+      ui.cameraTip.classList.add('show');
+      return;
+    }
+
+    state.emotionPause = true;
+    state.trainingActive = false;
+    stopGameTimer();
+    clearSpawnQueue();
+    clearClapTimers();
+    ui.cameraTip.textContent = message;
+    ui.cameraTip.classList.add('show');
+    ui.resumeTrainingBtn.classList.add('show');
+  }
+
+  function clearEmotionPause() {
+    state.emotionPause = false;
+    ui.resumeTrainingBtn.classList.remove('show');
+  }
+
+  function resumeGameTimer() {
+    stopGameTimer();
+    state.timerIntervalId = setInterval(() => {
+      state.secondsLeft -= 1;
+      setTimer(Math.max(0, state.secondsLeft));
+
+      if (state.secondsLeft <= 5 && state.trainingActive && !state.closeWarning) {
+        ui.systemAdvice.textContent = text.timerEnding;
+      }
+
+      if (state.secondsLeft <= 0) {
+        finishTraining();
+      }
+    }, 1000);
+  }
+
+  function closeResultModal() {
+    ui.resultModal.classList.remove('show');
+  }
+
+  function showResultModal() {
+    const action = getCurrentAction();
+    let desc = action.resultTry;
+    if (state.score >= 12) {
+      desc = action.resultGreat;
+    } else if (state.score >= 6) {
+      desc = action.resultGood;
+    }
+
+    ui.resultScore.textContent = `${state.score} ${action.scoreUnit}`;
+    ui.resultDesc.textContent = desc.replace('{score}', String(state.score));
+    ui.resultModal.classList.add('show');
+  }
+
+  function resetTrainingState() {
+    const action = getCurrentAction();
+    stopGameTimer();
+    clearSpawnQueue();
+    clearClapTimers();
+    closeResultModal();
+    clearCelebration();
+    state.score = 0;
+    state.secondsLeft = action.duration;
+    state.trainingActive = false;
+    state.countdownRunning = false;
+    state.closeWarning = false;
+    state.emotionPause = false;
+    state.currentFacialEmotion = '';
+    state.currentVoiceEmotion = '';
+    state.wristHistory.left = [];
+    state.wristHistory.right = [];
+    resetJumpState();
+    resetClapState();
+    ui.distanceWarning.classList.remove('show');
+    ui.resumeTrainingBtn.classList.remove('show');
+    createStars();
+    setTimer(action.duration);
+    ui.helperText.textContent = action.helperDefault;
+    ui.facialEmotion.textContent = text.facialDefault;
+    ui.voiceEmotion.textContent = state.currentActionKey === 'clap'
+      ? '\u7B49\u5F85\u5C0F\u624B\u62CD\u5230\u4E00\u8D77'
+      : (state.micEnabled ? text.voiceQuiet : text.voiceDefault);
+    ui.distanceWarning.textContent = text.distanceDefault;
+    ui.systemAdvice.textContent = action.actionAdvice;
+    updateScore();
+  }
+
+  async function initVisionRuntime() {
+    if (state.vision) {
+      return state.vision;
+    }
+
+    state.vision = await FilesetResolver.forVisionTasks(
+      'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+    );
+    return state.vision;
+  }
+
+  function resizeCanvasToVideo() {
+    const width = ui.cameraVideo.videoWidth || ui.captureStage.clientWidth;
+    const height = ui.cameraVideo.videoHeight || ui.captureStage.clientHeight;
+
+    if (ui.poseCanvas.width !== width || ui.poseCanvas.height !== height) {
+      ui.poseCanvas.width = width;
+      ui.poseCanvas.height = height;
+    }
+  }
+
+  async function initPoseLandmarker() {
+    if (state.poseLandmarker) {
+      return state.poseLandmarker;
+    }
+
+    ui.cameraTip.textContent = text.preparingModel;
+    ui.cameraTip.classList.add('show');
+
+    const vision = await initVisionRuntime();
+
+    state.poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
+      baseOptions: {
+        modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task'
+      },
+      runningMode: 'VIDEO',
+      numPoses: 1
+    });
+
+    return state.poseLandmarker;
+  }
+
+  async function initFaceLandmarker() {
+    if (state.faceLandmarker) {
+      return state.faceLandmarker;
+    }
+
+    ui.facialEmotion.textContent = text.facialLoading;
+    const vision = await initVisionRuntime();
+
+    state.faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
+      baseOptions: {
+        modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'
+      },
+      runningMode: 'VIDEO',
+      numFaces: 1,
+      outputFaceBlendshapes: true,
+      minFaceDetectionConfidence: 0.45,
+      minFacePresenceConfidence: 0.45,
+      minTrackingConfidence: 0.45
+    });
+
+    return state.faceLandmarker;
+  }
+
+  async function startCamera() {
+    if (state.cameraStarted) {
+      return;
+    }
+
+    let stream;
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'user',
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        }
+      });
+      state.micEnabled = true;
+    } catch (error) {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'user',
+          width: { ideal: 1280 },
+          height: { ideal: 720 }
+        },
+        audio: false
+      });
+      state.micEnabled = false;
+      ui.voiceEmotion.textContent = text.voiceMicDenied;
+    }
+
+    state.mediaStream = stream;
+    ui.cameraVideo.srcObject = stream;
+
+    await new Promise((resolve) => {
+      ui.cameraVideo.onloadedmetadata = () => {
+        ui.cameraVideo.play().then(resolve).catch(resolve);
+      };
+    });
+
+    resizeCanvasToVideo();
+    ui.placeholderState.classList.add('hidden');
+    ui.cameraTip.textContent = text.cameraReady;
+    ui.cameraTip.classList.add('show');
+    state.cameraStarted = true;
+  }
+
+  function drawPose(landmarks) {
+    canvasCtx.clearRect(0, 0, ui.poseCanvas.width, ui.poseCanvas.height);
+
+    if (!landmarks) {
+      return;
+    }
+
+    const joints = [11, 12, 13, 14, 15, 16, 23, 24];
+    const links = [
+      [11, 12], [11, 13], [13, 15], [12, 14], [14, 16], [11, 23], [12, 24], [23, 24]
+    ];
+
+    canvasCtx.save();
+    canvasCtx.translate(ui.poseCanvas.width, 0);
+    canvasCtx.scale(-1, 1);
+    canvasCtx.lineWidth = 6;
+    canvasCtx.strokeStyle = 'rgba(107, 157, 241, 0.85)';
+    canvasCtx.fillStyle = 'rgba(255, 190, 110, 0.95)';
+
+    links.forEach(([a, b]) => {
+      const first = landmarks[a];
+      const second = landmarks[b];
+      if (!first || !second || first.visibility < 0.5 || second.visibility < 0.5) {
+        return;
+      }
+
+      canvasCtx.beginPath();
+      canvasCtx.moveTo(first.x * ui.poseCanvas.width, first.y * ui.poseCanvas.height);
+      canvasCtx.lineTo(second.x * ui.poseCanvas.width, second.y * ui.poseCanvas.height);
+      canvasCtx.stroke();
+    });
+
+    joints.forEach((index) => {
+      const point = landmarks[index];
+      if (!point || point.visibility < 0.5) {
+        return;
+      }
+
+      canvasCtx.beginPath();
+      canvasCtx.arc(point.x * ui.poseCanvas.width, point.y * ui.poseCanvas.height, 8, 0, Math.PI * 2);
+      canvasCtx.fill();
+    });
+
+    canvasCtx.restore();
+  }
+
+  async function initAudioAnalysis() {
+    if (!state.audioContext) {
+      state.audioContext = new AudioContext();
+    }
+
+    if (state.audioContext.state === 'suspended') {
+      await state.audioContext.resume();
+    }
+
+    if (!state.mediaStream || !state.micEnabled) {
+      ui.voiceEmotion.textContent = text.voiceMicMissing;
+      return;
+    }
+
+    if (state.audioAnalyser) {
+      return;
+    }
+
+    ui.voiceEmotion.textContent = text.voiceLoading;
+
+    state.audioSource = state.audioContext.createMediaStreamSource(state.mediaStream);
+    state.audioAnalyser = state.audioContext.createAnalyser();
+    state.audioAnalyser.fftSize = 2048;
+    state.audioAnalyser.smoothingTimeConstant = 0.82;
+    state.audioSource.connect(state.audioAnalyser);
+    state.audioTimeData = new Uint8Array(state.audioAnalyser.frequencyBinCount);
+    state.audioFloatData = new Float32Array(state.audioAnalyser.fftSize);
+    state.voiceMetricsHistory = [];
+  }
+
+  function estimatePitchFromBuffer(buffer, sampleRate) {
+    let zeroCrossings = 0;
+    for (let index = 1; index < buffer.length; index += 1) {
+      const previous = buffer[index - 1];
+      const current = buffer[index];
+      if ((previous >= 0 && current < 0) || (previous < 0 && current >= 0)) {
+        zeroCrossings += 1;
+      }
+    }
+
+    if (zeroCrossings < 8) {
+      return 0;
+    }
+
+    return (zeroCrossings * sampleRate) / (2 * buffer.length);
+  }
+
+  function updateVoiceEmotion() {
+    if (!state.audioAnalyser || !state.audioContext || !state.micEnabled) {
+      return;
+    }
+
+    const now = performance.now();
+    if (now - state.lastVoiceUpdateAt < 260) {
+      return;
+    }
+    state.lastVoiceUpdateAt = now;
+
+    state.audioAnalyser.getFloatTimeDomainData(state.audioFloatData);
+    let sumSquares = 0;
+    for (const sample of state.audioFloatData) {
+      sumSquares += sample * sample;
+    }
+    const rms = Math.sqrt(sumSquares / state.audioFloatData.length);
+    state.latestAudioRms = rms;
+    const pitch = estimatePitchFromBuffer(state.audioFloatData, state.audioContext.sampleRate);
+
+    state.voiceMetricsHistory.push({ rms, pitch });
+    if (state.voiceMetricsHistory.length > 10) {
+      state.voiceMetricsHistory.shift();
+    }
+
+    if (state.currentActionKey === 'clap') {
+      state.currentVoiceEmotion = state.lastClapAt > 0 && performance.now() - state.lastClapAt < 900
+        ? '\u521A\u521A\u62CD\u4E2D\u4E86'
+        : '\u7B49\u5F85\u5C0F\u624B\u62CD\u5230\u4E00\u8D77';
+      ui.voiceEmotion.textContent = state.currentVoiceEmotion;
+      return;
+    }
+
+    const speechActive = rms > 0.018;
+    if (!speechActive) {
+      state.currentVoiceEmotion = text.voiceQuiet;
+      ui.voiceEmotion.textContent = state.currentVoiceEmotion;
+      return;
+    }
+
+    const avgRms = state.voiceMetricsHistory.reduce((total, item) => total + item.rms, 0) / state.voiceMetricsHistory.length;
+    const avgPitch = state.voiceMetricsHistory.reduce((total, item) => total + item.pitch, 0) / state.voiceMetricsHistory.length;
+    const rmsRange = Math.max(...state.voiceMetricsHistory.map((item) => item.rms)) - Math.min(...state.voiceMetricsHistory.map((item) => item.rms));
+    const pitchRange = Math.max(...state.voiceMetricsHistory.map((item) => item.pitch)) - Math.min(...state.voiceMetricsHistory.map((item) => item.pitch));
+
+    if (avgRms > 0.065 || rmsRange > 0.05) {
+      state.currentVoiceEmotion = avgPitch > 210 ? text.voiceExcited : text.voiceIntense;
+      ui.voiceEmotion.textContent = state.currentVoiceEmotion;
+      return;
+    }
+
+    if (avgRms > 0.035 && avgPitch > 0 && avgPitch < 165 && pitchRange > 40) {
+      state.currentVoiceEmotion = text.voiceCry;
+      ui.voiceEmotion.textContent = state.currentVoiceEmotion;
+      return;
+    }
+
+    if (avgRms < 0.03 && avgPitch > 0 && avgPitch < 170) {
+      state.currentVoiceEmotion = text.voiceSoft;
+      ui.voiceEmotion.textContent = state.currentVoiceEmotion;
+      return;
+    }
+
+    if (avgPitch > 205) {
+      state.currentVoiceEmotion = text.voiceCheerful;
+      ui.voiceEmotion.textContent = state.currentVoiceEmotion;
+      return;
+    }
+
+    state.currentVoiceEmotion = text.voiceCalm;
+    ui.voiceEmotion.textContent = state.currentVoiceEmotion;
+  }
+
+  function getBlendshapeScore(categories, name) {
+    const item = categories.find((entry) => entry.categoryName === name);
+    return item ? item.score : 0;
+  }
+
+  function updateFacialEmotion(faceResult) {
+    const categories = faceResult?.faceBlendshapes?.[0]?.categories;
+    if (!categories?.length) {
+      state.currentFacialEmotion = text.facialMissing;
+      ui.facialEmotion.textContent = state.currentFacialEmotion;
+      return;
+    }
+
+    const smile = (getBlendshapeScore(categories, 'mouthSmileLeft') + getBlendshapeScore(categories, 'mouthSmileRight')) / 2;
+    const frown = (getBlendshapeScore(categories, 'mouthFrownLeft') + getBlendshapeScore(categories, 'mouthFrownRight')) / 2;
+    const browDown = (getBlendshapeScore(categories, 'browDownLeft') + getBlendshapeScore(categories, 'browDownRight')) / 2;
+    const browOuterUp = (getBlendshapeScore(categories, 'browOuterUpLeft') + getBlendshapeScore(categories, 'browOuterUpRight')) / 2;
+    const eyesWide = (getBlendshapeScore(categories, 'eyeWideLeft') + getBlendshapeScore(categories, 'eyeWideRight')) / 2;
+    const browInnerUp = getBlendshapeScore(categories, 'browInnerUp');
+    const jawOpen = getBlendshapeScore(categories, 'jawOpen');
+    const mouthPress = (getBlendshapeScore(categories, 'mouthPressLeft') + getBlendshapeScore(categories, 'mouthPressRight')) / 2;
+
+    if (smile > 0.34) {
+      state.currentFacialEmotion = text.facialHappy;
+      ui.facialEmotion.textContent = state.currentFacialEmotion;
+      return;
+    }
+
+    if (eyesWide > 0.32 && jawOpen > 0.18) {
+      state.currentFacialEmotion = text.facialSurprised;
+      ui.facialEmotion.textContent = state.currentFacialEmotion;
+      return;
+    }
+
+    if ((browDown > 0.2 && mouthPress > 0.12) || (browDown > 0.24 && jawOpen < 0.22 && browOuterUp < 0.18)) {
+      state.currentFacialEmotion = text.facialAngry;
+      ui.facialEmotion.textContent = state.currentFacialEmotion;
+      return;
+    }
+
+    if (frown > 0.22 && browInnerUp > 0.18) {
+      state.currentFacialEmotion = text.facialSad;
+      ui.facialEmotion.textContent = state.currentFacialEmotion;
+      return;
+    }
+
+    if (eyesWide > 0.24 && browInnerUp > 0.18) {
+      state.currentFacialEmotion = text.facialFearful;
+      ui.facialEmotion.textContent = state.currentFacialEmotion;
+      return;
+    }
+
+    state.currentFacialEmotion = text.facialNeutral;
+    ui.facialEmotion.textContent = state.currentFacialEmotion;
+  }
+
+  function showCloseWarning(show) {
+    state.closeWarning = show;
+    ui.distanceWarning.classList.toggle('show', show);
+    ui.distanceWarning.textContent = show ? text.tooClose : text.distanceOk;
+    ui.systemAdvice.textContent = show ? text.tooCloseAdvice : (state.secondsLeft <= 5 ? text.timerEnding : text.keepGoingAdvice);
+  }
+
+  function applyEmotionSupport() {
+    const action = getCurrentAction();
+    if (!state.trainingActive && !state.emotionPause) {
+      return;
+    }
+
+    const facial = state.currentFacialEmotion;
+    const voice = state.currentVoiceEmotion;
+    const sadDetected = facial === text.facialSad || voice === text.voiceCry;
+    const angryDetected = facial === text.facialAngry || voice === text.voiceIntense;
+
+    if (angryDetected) {
+      pauseTrainingForEmotion(text.comfortAngry);
+      return;
+    }
+
+    if (sadDetected) {
+      ui.cameraTip.textContent = action.comfortSad;
+      ui.cameraTip.classList.add('show');
+      return;
+    }
+
+    if (state.emotionPause) {
+      return;
+    }
+
+    if (state.trainingActive) {
+      ui.cameraTip.textContent = action.countdownTip;
+      ui.cameraTip.classList.add('show');
+    }
+  }
+
+  function isLandmarkVisible(point, minVisibility = 0.5) {
+    return Boolean(
+      point &&
+      point.visibility >= minVisibility &&
+      point.x > 0.02 &&
+      point.x < 0.98 &&
+      point.y > 0.02 &&
+      point.y < 0.98
+    );
+  }
+
+  function isFaceFullyVisible(landmarks) {
+    if (!landmarks) {
+      return false;
+    }
+
+    const requiredPoints = [0, 2, 5];
+    return requiredPoints.every((index) => isLandmarkVisible(landmarks[index], 0.35));
+  }
+
+  function checkDistance(landmarks) {
+    if (!landmarks) {
+      showCloseWarning(false);
+      return;
+    }
+
+    const leftShoulder = landmarks[11];
+    const rightShoulder = landmarks[12];
+    const leftHip = landmarks[23];
+    const rightHip = landmarks[24];
+
+    if (
+      !leftShoulder || !rightShoulder || !leftHip || !rightHip ||
+      leftShoulder.visibility < 0.45 || rightShoulder.visibility < 0.45 ||
+      leftHip.visibility < 0.45 || rightHip.visibility < 0.45
+    ) {
+      ui.distanceWarning.textContent = text.distanceFarther;
+      return;
+    }
+
+    const shoulderWidth = Math.abs(leftShoulder.x - rightShoulder.x);
+    const torsoHeight = Math.abs(((leftShoulder.y + rightShoulder.y) / 2) - ((leftHip.y + rightHip.y) / 2));
+    showCloseWarning(shoulderWidth > 0.34 || torsoHeight > 0.48);
+  }
+
+  function updateFeedbackFromPose(landmarks) {
+    const action = getCurrentAction();
+    if (!landmarks) {
+      ui.helperText.textContent = state.currentActionKey === 'jump'
+        ? '\u7AD9\u5230\u955C\u5934\u4E2D\u592E\uFF0C\u6211\u4EEC\u51C6\u5907\u50CF\u5C0F\u5154\u5B50\u4E00\u6837\u8DF3\u8D77\u6765\uFF5E'
+        : state.currentActionKey === 'clap'
+          ? '\u8BA9\u5C0F\u8138\u548C\u53CC\u624B\u90FD\u5165\u955C\uFF0C\u6211\u4EEC\u51C6\u5907\u8DDF\u7740\u8282\u594F\u62CD\u624B\u5566\uFF5E'
+          : text.noPoseHelper;
+      state.currentFacialEmotion = text.facialMissing;
+      ui.facialEmotion.textContent = text.facialMissing;
+      ui.distanceWarning.textContent = text.distanceDefault;
+      return;
+    }
+
+    if (!isFaceFullyVisible(landmarks)) {
+      ui.helperText.textContent = text.faceMissingHelper;
+      state.currentFacialEmotion = text.facialMissing;
+      ui.facialEmotion.textContent = text.facialMissing;
+      ui.systemAdvice.textContent = text.faceMissingAdvice;
+      ui.distanceWarning.textContent = text.distanceDefault;
+      return;
+    }
+
+    const leftWrist = landmarks[15];
+    const rightWrist = landmarks[16];
+    const nose = landmarks[0];
+    const wristY = Math.min(leftWrist?.y ?? 1, rightWrist?.y ?? 1);
+
+    if (state.currentActionKey === 'clap') {
+      const handsVisible = leftWrist?.visibility > 0.45 && rightWrist?.visibility > 0.45;
+      const handDistance = handsVisible ? Math.abs(leftWrist.x - rightWrist.x) : 1;
+      if (!handsVisible) {
+        ui.helperText.textContent = '\u628A\u4E24\u53EA\u5C0F\u624B\u90FD\u4E3E\u5230\u80F8\u524D\u9644\u8FD1\uFF0C\u6211\u4EEC\u624D\u80FD\u8BC6\u522B\u62CD\u624B\u54E6\uFF5E';
+      } else if (state.clapPhase === 'demo') {
+        ui.helperText.textContent = '\u5148\u8BA4\u771F\u542C\u4E00\u904D\u9F13\u70B9\uFF0C\u7B49\u4F1A\u513F\u7167\u7740\u62CD\u624B\u5C31\u53EF\u4EE5\u5566\uFF5E';
+      } else if (state.clapPhase === 'listen' && handDistance < 0.11) {
+        ui.helperText.textContent = '\u62CD\u5F97\u5F88\u597D\uFF0C\u518D\u8DDF\u4E0B\u4E00\u4E2A\u8282\u594F\u70B9\u5427\uFF5E';
+      } else if (state.clapPhase === 'listen') {
+        ui.helperText.textContent = '\u770B\u7740\u4E0A\u65B9\u53D1\u5149\u7684\u70B9\u6765\u62CD\u624B\uFF0C\u6162\u6162\u6765\u5C31\u5F88\u68D2\uFF5E';
+      } else {
+        ui.helperText.textContent = '\u53CC\u624B\u653E\u5728\u80F8\u524D\uFF0C\u7B49\u542C\u5230\u8282\u594F\u58F0\u518D\u62CD\u4E00\u4E0B\u5427\uFF5E';
+      }
+
+      if (nose && nose.y > 0.62) {
+        ui.systemAdvice.textContent = text.postureAdvice;
+      } else if (!state.closeWarning && state.clapPhase !== 'review') {
+        ui.systemAdvice.textContent = action.actionAdvice;
+      }
+      return;
+    }
+
+    if (state.currentActionKey === 'jump') {
+      const leftAnkle = landmarks[27];
+      const rightAnkle = landmarks[28];
+      const hipCenterY = ((landmarks[23]?.y ?? 1) + (landmarks[24]?.y ?? 1)) / 2;
+      if (leftAnkle?.visibility > 0.45 && rightAnkle?.visibility > 0.45) {
+        if (state.jumpPhase === 'air') {
+          ui.helperText.textContent = '\u5C0F\u5154\u5B50\u6B63\u5728\u8DF3\u8D77\u6765\uFF0C\u8F7B\u8F7B\u843D\u5730\u54E6\uFF5E';
+        } else if (hipCenterY < 0.48) {
+          ui.helperText.textContent = '\u8EAB\u4F53\u8F7B\u8F7B\u5F39\u8D77\u6765\uFF0C\u50CF\u5C0F\u5154\u5B50\u4E00\u6837\u8DF3\u5427\uFF5E';
+        } else {
+          ui.helperText.textContent = '\u859B\u5F2F\u4E00\u70B9\u518D\u8F7B\u8F7B\u8DF3\u8D77\u6765\uFF0C\u8282\u594F\u4F1A\u66F4\u597D\u54E6\uFF5E';
+        }
+      } else {
+        ui.helperText.textContent = '\u8BA9\u53CC\u811A\u548C\u4E0A\u534A\u8EAB\u4E00\u8D77\u5165\u955C\uFF0C\u6211\u4EEC\u624D\u80FD\u6570\u5230\u8DF3\u8DC3\u6B21\u6570\u54E6\uFF5E';
+      }
+
+      if (nose && nose.y > 0.62) {
+        ui.systemAdvice.textContent = text.postureAdvice;
+      } else if (!state.closeWarning) {
+        ui.systemAdvice.textContent = action.actionAdvice;
+      }
+      return;
+    }
+
+    if (wristY < 0.28) {
+      ui.helperText.textContent = text.almostThere;
+    } else if (wristY < 0.46) {
+      ui.helperText.textContent = text.keepHigher;
+    } else {
+      ui.helperText.textContent = text.raiseHand;
+    }
+
+    if (nose && nose.y > 0.62) {
+      ui.systemAdvice.textContent = text.postureAdvice;
+    } else if (!state.closeWarning) {
+      ui.systemAdvice.textContent = state.secondsLeft <= 5 ? text.timerEnding : text.timerRunningAdvice;
+    }
+  }
+
+  function tryCountJump(landmarks) {
+    if (!state.trainingActive || !landmarks || state.closeWarning) {
+      return;
+    }
+
+    const required = [11, 12, 23, 24, 27, 28];
+    const allVisible = required.every((index) => landmarks[index] && landmarks[index].visibility > 0.45);
+    if (!allVisible) {
+      return;
+    }
+
+    const hipCenterY = (landmarks[23].y + landmarks[24].y) / 2;
+    const ankleCenterY = (landmarks[27].y + landmarks[28].y) / 2;
+    const bodyHeight = Math.max(0.12, ankleCenterY - hipCenterY);
+
+    if (state.jumpBaselineY == null) {
+      state.jumpBaselineY = hipCenterY;
+      return;
+    }
+
+    state.jumpBaselineY = state.jumpBaselineY * 0.92 + hipCenterY * 0.08;
+    const rise = state.jumpBaselineY - hipCenterY;
+    const jumpThreshold = bodyHeight * 0.08;
+
+    if (rise > jumpThreshold && state.jumpPhase !== 'air') {
+      state.jumpPhase = 'air';
+      state.score += 1;
+      updateScore();
+      ui.helperText.textContent = state.score % 3 === 0
+        ? '\u8DF3\u5F97\u771F\u68D2\uFF0C\u5C31\u50CF\u5C0F\u5154\u5B50\u4E00\u6837\u8F7B\u5FEB\uFF5E'
+        : '\u770B\u5230\u4F60\u5411\u4E0A\u8DF3\u8D77\u6765\u4E86\uFF0C\u6211\u4EEC\u7EE7\u7EED\u5427\uFF5E';
+      triggerRewardBurst(5);
+      return;
+    }
+
+    if (rise < bodyHeight * 0.03) {
+      state.jumpPhase = 'ground';
+    }
+  }
+
+  function updateWristHistory(landmarks) {
+    const wrists = [
+      { key: 'left', point: landmarks?.[15] },
+      { key: 'right', point: landmarks?.[16] }
+    ];
+
+    wrists.forEach(({ key, point }) => {
+      const history = state.wristHistory[key];
+      if (!point || point.visibility <= 0.45) {
+        history.length = 0;
+        return;
+      }
+
+      history.push({ x: point.x, y: point.y });
+      if (history.length > 6) {
+        history.shift();
+      }
+    });
+  }
+
+  function wristMovingUp(history) {
+    if (history.length < 3) {
+      return false;
+    }
+
+    return history[0].y - history[history.length - 1].y > 0.025;
+  }
+
+  function tryDetectClap(landmarks) {
+    if (
+      !state.trainingActive ||
+      !landmarks ||
+      state.closeWarning ||
+      state.currentActionKey !== 'clap' ||
+      state.clapPhase !== 'listen'
+    ) {
+      return;
+    }
+
+    if (!isFaceFullyVisible(landmarks)) {
+      return;
+    }
+
+    const leftWrist = landmarks[15];
+    const rightWrist = landmarks[16];
+    const leftElbow = landmarks[13];
+    const rightElbow = landmarks[14];
+    if (
+      !leftWrist || !rightWrist || !leftElbow || !rightElbow ||
+      leftWrist.visibility < 0.28 || rightWrist.visibility < 0.28 ||
+      leftElbow.visibility < 0.2 || rightElbow.visibility < 0.2
+    ) {
+      return;
+    }
+
+    const wristDistance = Math.hypot(leftWrist.x - rightWrist.x, leftWrist.y - rightWrist.y);
+    const wristsHighEnough = ((leftWrist.y + rightWrist.y) / 2) < 0.84;
+    if (wristDistance > 0.34) {
+      state.handsApartReady = true;
+      return;
+    }
+
+    const now = performance.now();
+    const handsVeryClose = wristDistance < 0.17;
+    const handsCloseEnough = wristDistance < 0.23;
+    const clapLikely = handsVeryClose || handsCloseEnough;
+    if (!state.handsApartReady || !wristsHighEnough || !clapLikely || now - state.lastClapAt < 140) {
+      return;
+    }
+
+    state.handsApartReady = false;
+    state.lastClapAt = now;
+    state.clapUserTimes.push(now);
+
+    let matchedIndex = -1;
+    let matchedDelta = Number.POSITIVE_INFINITY;
+
+    if (
+      state.clapCurrentBeatIndex >= 0 &&
+      typeof state.clapExpectedTimes[state.clapCurrentBeatIndex] === 'number'
+    ) {
+      matchedIndex = state.clapCurrentBeatIndex;
+      matchedDelta = now - state.clapExpectedTimes[state.clapCurrentBeatIndex];
+    } else {
+      state.clapExpectedTimes.forEach((expectedTime, index) => {
+        if (typeof expectedTime !== 'number') {
+          return;
+        }
+        const delta = now - expectedTime;
+        const absDelta = Math.abs(delta);
+        if (absDelta < 780 && absDelta < Math.abs(matchedDelta)) {
+          matchedIndex = index;
+          matchedDelta = delta;
+        }
+      });
+    }
+
+    if (matchedIndex === -1) {
+      ui.systemAdvice.textContent = '\u5148\u770B\u6E05\u695A\u53D1\u4EAE\u7684\u8282\u594F\u70B9\uFF0C\u518D\u62CD\u624B\u4F1A\u66F4\u51C6\u54E6';
+      return;
+    }
+
+    state.clapExpectedTimes[matchedIndex] = null;
+    state.clapCurrentBeatIndex = -1;
+    state.clapMatchedCount += 1;
+    state.score += 1;
+    updateScore();
+
+    const dot = ui.beatTrack.querySelectorAll('.beat-dot')[matchedIndex];
+    dot?.classList.remove('active', 'missed');
+    dot?.classList.add('hit');
+
+    if (matchedDelta < -320) {
+      ui.systemAdvice.textContent = '\u8FD9\u4E00\u4E0B\u6709\u70B9\u5FEB\u5566\uFF0C\u7B49\u8282\u594F\u70B9\u4EAE\u4E00\u4E0B\u518D\u62CD\u5427';
+    } else if (matchedDelta > 320) {
+      ui.systemAdvice.textContent = '\u8FD9\u4E00\u4E0B\u6709\u70B9\u6162\u5566\uFF0C\u4E0B\u6B21\u53EF\u4EE5\u518D\u65E9\u4E00\u70B9\u62CD';
+    } else {
+      ui.systemAdvice.textContent = '\u8FD9\u4E00\u4E0B\u62CD\u5F97\u5F88\u51C6\u54E6\uFF0C\u7EE7\u7EED\u4FDD\u6301\uFF01';
+    }
+  }
+
+  function tryCaptureStars(landmarks) {
+    if (!state.trainingActive || !landmarks) {
+      return;
+    }
+
+    if (!isFaceFullyVisible(landmarks) || state.closeWarning) {
+      state.stars.forEach((star) => {
+        star.hoverFrames = 0;
+      });
+      return;
+    }
+
+    updateWristHistory(landmarks);
+
+    const wrists = [
+      { point: landmarks[15], history: state.wristHistory.left },
+      { point: landmarks[16], history: state.wristHistory.right }
+    ].filter((wrist) => wrist.point && wrist.point.visibility > 0.45);
+
+    if (!wrists.length) {
+      return;
+    }
+
+    state.stars.forEach((star) => {
+      if (star.captured) {
+        return;
+      }
+
+      const matched = wrists.find((wrist) => {
+        const mirroredX = 1 - wrist.point.x;
+        const dx = mirroredX - star.x;
+        const dy = wrist.point.y - star.y;
+        const distance = Math.hypot(dx, dy);
+        const handIsHigh = wrist.point.y < 0.44;
+        return handIsHigh && distance < 0.072 && (wristMovingUp(wrist.history) || distance < 0.05);
+      });
+
+      if (!matched) {
+        star.hoverFrames = 0;
+        return;
+      }
+
+      star.hoverFrames += 1;
+      if (star.hoverFrames < 1) {
+        return;
+      }
+
+      star.captured = true;
+      star.element.classList.add('captured');
+      state.score += 1;
+      updateScore();
+      ui.helperText.textContent = state.score % 3 === 0 ? text.niceCombo : text.captureHelper;
+      triggerRewardBurst(8);
+      scheduleRefillIfNeeded();
+    });
+  }
+
+  function performCurrentActionDetection(landmarks) {
+    if (state.currentActionKey === 'jump') {
+      tryCountJump(landmarks);
+      return;
+    }
+    if (state.currentActionKey === 'clap') {
+      tryDetectClap(landmarks);
+      return;
+    }
+    tryCaptureStars(landmarks);
+  }
+
+  function detectFrame() {
+    if (!state.detecting || !state.poseLandmarker || ui.cameraVideo.readyState < 2) {
+      requestAnimationFrame(detectFrame);
+      return;
+    }
+
+    resizeCanvasToVideo();
+
+    if (ui.cameraVideo.currentTime !== state.lastVideoTime) {
+      state.lastVideoTime = ui.cameraVideo.currentTime;
+      const now = performance.now();
+      const result = state.poseLandmarker.detectForVideo(ui.cameraVideo, now);
+      const faceResult = state.faceLandmarker
+        ? state.faceLandmarker.detectForVideo(ui.cameraVideo, now)
+        : null;
+      const landmarks = result.landmarks?.[0] || null;
+      drawPose(landmarks);
+      updateFacialEmotion(faceResult);
+      updateVoiceEmotion();
+      applyEmotionSupport();
+      checkDistance(landmarks);
+      updateFeedbackFromPose(landmarks);
+      performCurrentActionDetection(landmarks);
+    }
+
+    requestAnimationFrame(detectFrame);
+  }
+
+  function ensureDetectionLoop() {
+    if (state.detecting) {
+      return;
+    }
+
+    state.detecting = true;
+    detectFrame();
+  }
+
+  async function runCountdown() {
+    const action = getCurrentAction();
+    state.countdownRunning = true;
+    ui.countdownOverlay.classList.add('show');
+    ui.cameraTip.textContent = text.readyCountdown;
+    ui.cameraTip.classList.add('show');
+
+    for (const number of [3, 2, 1]) {
+      ui.countdownOverlay.textContent = number;
+      await new Promise((resolve) => setTimeout(resolve, 900));
+    }
+
+    ui.countdownOverlay.textContent = 'GO';
+    await new Promise((resolve) => setTimeout(resolve, 650));
+    ui.countdownOverlay.classList.remove('show');
+    state.countdownRunning = false;
+    state.trainingActive = true;
+    ui.cameraTip.textContent = action.countdownTip;
+    ui.cameraTip.classList.add('show');
+    ui.systemAdvice.textContent = action.actionAdvice;
+  }
+
+  function finishTraining() {
+    if (!state.trainingActive) {
+      return;
+    }
+
+    state.trainingActive = false;
+    recordTrainingSession();
+    stopGameTimer();
+    clearSpawnQueue();
+    clearClapTimers();
+    setTimer(0);
+    ui.cameraTip.textContent = text.endTimeTip;
+    ui.cameraTip.classList.add('show');
+    triggerRewardBurst(18);
+    setTimeout(showResultModal, 550);
+  }
+
+  function startGameTimer() {
+    const action = getCurrentAction();
+    stopGameTimer();
+    state.secondsLeft = action.duration;
+    setTimer(action.duration);
+    resumeGameTimer();
+  }
+
+  async function beginTraining() {
+    if (state.countdownRunning) {
+      return;
+    }
+
+    ui.startTrainingBtn.disabled = true;
+
+    try {
+      resetTrainingState();
+      await initPoseLandmarker();
+      await initFaceLandmarker();
+      await startCamera();
+      await initAudioAnalysis();
+      ensureDetectionLoop();
+      await runCountdown();
+      startGameTimer();
+      if (state.currentActionKey === 'clap') {
+        startClapRound();
+      }
+    } catch (error) {
+      console.error(error);
+      ui.placeholderState.classList.remove('hidden');
+      ui.cameraTip.textContent = text.startupFailed;
+      ui.cameraTip.classList.add('show');
+      ui.systemAdvice.textContent = text.startupAdvice;
+      ui.facialEmotion.textContent = text.facialMissing;
+      ui.voiceEmotion.textContent = text.voiceMicMissing;
+    } finally {
+      ui.startTrainingBtn.disabled = false;
+    }
+  }
+
+  ui.startTrainingBtn.addEventListener('click', beginTraining);
+
+  ui.resetTrainingBtn.addEventListener('click', () => {
+    resetTrainingState();
+    if (!state.cameraStarted) {
+      ui.placeholderState.classList.remove('hidden');
+      ui.cameraTip.textContent = getCurrentAction().placeholderText;
+      ui.cameraTip.classList.add('show');
+      return;
+    }
+
+    ui.cameraTip.textContent = getCurrentAction().restartReady;
+    ui.cameraTip.classList.add('show');
+  });
+
+  ui.nextActionBtn.addEventListener('click', () => {
+    toggleNextAction();
+  });
+
+  ui.openReportBtn.addEventListener('click', openReportPage);
+
+  ui.openLoginBtn.addEventListener('click', () => {
+    openLoginOverlay();
+  });
+
+  ui.saveChildNameBtn.addEventListener('click', submitChildName);
+
+  ui.skipLoginBtn.addEventListener('click', () => {
+    if (!ui.childNameInput.value.trim()) {
+      ui.childNameInput.value = state.childName;
+    }
+    submitChildName();
+  });
+
+  ui.loginOverlay.addEventListener('click', (event) => {
+    if (event.target === ui.loginOverlay) {
+      closeLoginOverlay();
+    }
+  });
+
+  ui.childNameInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      submitChildName();
+    }
+  });
+
+  ui.closeReportBtn.addEventListener('click', closeReportPage);
+
+  ui.calendarPrevBtn.addEventListener('click', () => {
+    state.reportMonth = new Date(state.reportMonth.getFullYear(), state.reportMonth.getMonth() - 1, 1);
+    renderReportCalendar();
+  });
+
+  ui.calendarNextBtn.addEventListener('click', () => {
+    state.reportMonth = new Date(state.reportMonth.getFullYear(), state.reportMonth.getMonth() + 1, 1);
+    renderReportCalendar();
+  });
+
+  ui.resumeTrainingBtn.addEventListener('click', () => {
+    clearEmotionPause();
+    state.trainingActive = true;
+    ui.cameraTip.textContent = getCurrentAction().comfortResume;
+    ui.cameraTip.classList.add('show');
+    resumeGameTimer();
+    if (state.currentActionKey === 'clap') {
+      startClapRound();
+    }
+  });
+
+  ui.playAgainBtn.addEventListener('click', async () => {
+    closeResultModal();
+    await beginTraining();
+  });
+
+  ui.closeResultBtn.addEventListener('click', closeResultModal);
+
+  window.addEventListener('resize', resizeCanvasToVideo);
+
+  state.trainingHistory = loadTrainingHistory();
+  state.childName = normalizeChildName(loadChildName() || state.childName);
+  syncChildNameUI();
+  syncActionUI();
+  resetTrainingState();
+  ui.cameraTip.textContent = text.cameraNeedPermission;
+  setProgress(0);
+  if (!loadChildName()) {
+    openLoginOverlay('');
+  }
+</script>
+</body>
+</html>
