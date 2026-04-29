@@ -31,15 +31,23 @@
 
   body {
     font-family: 'ZCOOL KuaiLe', 'Baloo 2', cursive, sans-serif;
-    background:
-      radial-gradient(circle at top left, rgba(255, 223, 146, 0.15), transparent 24%),
-      radial-gradient(circle at top right, rgba(161, 196, 253, 0.2), transparent 28%),
-      var(--bg-color);
+    background: url('ground.jpg') center center / cover no-repeat;
     margin: 0;
     padding: 20px;
     color: #334155;
     display: flex;
     justify-content: center;
+    position: relative;
+    z-index: 0;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.3);
+    z-index: -1;
+    pointer-events: none;
   }
 
   .app-container {
